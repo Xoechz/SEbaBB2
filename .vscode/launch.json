@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "EPE - Build and Run Pascal",
+      "type": "f5anything",
+      "request": "launch",
+      "command": "${fileDirname}/bin/${fileBasenameNoExtension}",
+      "terminalName": "EPE - Pascal Output",
+      "terminalIndex": -1,
+      "showTerminal": true,
+      "preLaunchTask": "${defaultBuildTask}"
+    },
+    {
+      "name": "Debugging(does not work with read or readln)",
+      "type": "gdb",
+      "request": "launch",
+      "target": "${fileDirname}/bin/${fileBasenameNoExtension}",
+      "cwd": "${fileDirname}",
+      "valuesFormatting": "parseText",
+      "preLaunchTask": "${defaultBuildTask}"
+    }
+  ]
+}
