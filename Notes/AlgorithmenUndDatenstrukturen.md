@@ -1,4 +1,5 @@
 # Algorithmen und Datenstrukturen
+
 ## 29.2.2024
 
 ### Lehrplan
@@ -16,6 +17,7 @@ Objektorientiertes Programmieren
 Excel
 
 ### Suchalgorithmen
+
 sequenzielle Suche O(n)
 binäre Suche O(log n)
 
