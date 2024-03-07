@@ -1,7 +1,7 @@
 # Betriebswirtschaftslehre
 
-## 29.02.2024
+## 7.3.2024
 
-### Was ist Management
+### Übungen
 
-Hierarchien von Firmen wie auf Folien.(20 Minuten ohne reden ohne etwas zu sagen).
+In Excel:

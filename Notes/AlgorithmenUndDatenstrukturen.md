@@ -37,8 +37,22 @@ Offener Speicherbereich braucht Delete Flag
 
 Vorsicht bei auswahl der hash methode
 
-## Suchen in Zeichenketten
+### Suchen in Zeichenketten
 
 Einfache Lösung Drüberiterieren = O(n*m)
 
 O(n+m) existiert
+
+## 7.3.2024
+
+### Datenkapselung
+
+Module geben dem User nur die Proceduren die er benutzen dar zur verfügung, alle inneren Vorgänge und Datenstrukturen sind versteckt. wie private/public.
+
+Verfügbare Procedures sind im Interface hinterlegt.
+
+In pascal werden dazu Units verwendet. In einem Unit gibt es einen Implementierungs Teil und einen Interface Teil. Wenn sich etwas in der Implementierung Ändert muss man den Code der das Interface nutzt nicht ändern.
+
+Man kann im Interface auch typen deklarieren.
+
+Abstrakt => nicht direkt implementiert
