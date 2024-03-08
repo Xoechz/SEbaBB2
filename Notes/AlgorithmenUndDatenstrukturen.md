@@ -56,3 +56,61 @@ In pascal werden dazu Units verwendet. In einem Unit gibt es einen Implementieru
 Man kann im Interface auch typen deklarieren.
 
 Abstrakt => nicht direkt implementiert
+
+## 8.3.2024
+
+### Entwurf
+
+Je mehr Gedanken um den Entwurf man sich vor der Implementierung macht, desto weniger Gedanken muss man sich nach der Implementierung machen.
+
+Abstraktion, herunterbrechen herunterbrechen herunterbrechen.
+
+#### Entwurfsebenen
+
+Subsysteme mit schwacher Kopplung. Kommunizieren über Dateien, Datenbanken und Netzwerke
+
+Diese bestehen aus Modulen mit enger Kopplung die über Aufrufschnittstellen kommunizieren.
+
+Dies kann man noch auf einzelne Algorithmen zerbrechen.
+
+Bespiel:
+
+Compiler erzeugt aus .pas ein .o file, Linker erstellt daraus eine .exe.
+
+Der Compiler wiederum besteht aus den Modulen Scanner, Parser, Symboltabelle und CodeGenerator. Der Scanner lest zeichen ab dem "BEGIN" ein, der Parser wertet die Gültigkeit aus und speichert Variablen in die Symboltabelle und der CodeGenerator erzeugt aus dem Code das Programm.
+
+#### Zerlegungsarten
+
+Man kann eine Anforderung auf 3 Weisen verbessern, je nach Anforderung gibt es gewisse Vor und Nachteile für jede Art.
+
+Aufgabenorientiert.
+
+Datenorientiert.
+
+Objektorientiert.
+
+#### Beispiel mit 3D Drucker
+
+Parser
+
+Instruktionen Speichern
+
+Koordinaten definieren
+
+Darstellung
+
+Gerade linien
+
+Kurven
+
+in Schritte brechen
+
+Validation der Instruktionen
+
+Nutzeroberfläche
+
+Linie Zeichen
+
+Drucker zeichen
+
+Editor
