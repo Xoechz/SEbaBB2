@@ -1,0 +1,20 @@
+PROFESSIONELLE SOFTWAREENTWICKLUNG MIT MODERNSTEN METHODEN UND WERKZEUGEN
+
+Software ist allgegenwärtig, in vielen Bereichen mittlerweile unverzichtbar 
+und muss immer höhere Anforderungen hinsichtlich Funktionalität, Bedienbarkeit
+und Sicherheit erfüllen.
+
+Der Bachelorstudiengang Software Engineering bietet den Studierenden eine 
+Ausbildung, die sie zur Entwicklung von innovativer Qualitätssoftware befähigt, 
+ohne Einschränkung auf eine bestimmte Anwendungsdomäne. Dabei ist kreatives 
+Problemlösen durch Einsatz modernster Methoden und Werkzeuge gefragt. Das Studium 
+geht über das reine Programmieren weit hinaus, denn es umfasst den gesamten Software-
+Lebenszyklus: von der Problemanalyse über Design, Implementierung mit einer breiten 
+Palette von Programmiersprachen und Test bis zur Wartung und Weiterentwicklung.
+
+Die Absolvent*innen arbeiten typischerweise in interdisziplinären, internationalen 
+Teams, ortsunabhängig (z. B. im Homeoffice) und mit flexiblen Arbeitszeiten. Sie 
+arbeiten aber auch in der Beratung, machen sich selbstständig oder gründen Startups.
+
+Das breit angelegte Bachelorstudium Software Engineering bietet darüber hinaus 
+eine gute Basis für viele weiterführende Masterstudiengänge.

@@ -1,10 +1,4 @@
 {
   "editor.mouseWheelZoom": true,
   "editor.tabSize": 2,
-  "files.exclude": {
-    "**/*.exe": true,
-    "**/*.o": true,
-    "**/*.ppu": true,
-    "**/bin": true
-  },
 }
