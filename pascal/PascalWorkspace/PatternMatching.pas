@@ -231,6 +231,64 @@ BEGIN
     END;
 END;
 
+FUNCTION RabinKarp(s,p: STRING): byte;
+CONST 
+  d = 256;
+  q = 8355967;
+VAR 
+  i, j: word;
+  position: byte;
+  hashPattern, hashSearch, dExp: longint;
+BEGIN
+  hashPattern := 0;
+  hashSearch := 0;
+  FOR i:=1 TO length(p) DO
+    BEGIN
+      hashPattern := (d * hashPattern + ord(p[i])) MOD q;
+      hashSearch := (d * hashSearch + ord(s[i])) MOD q;
+    END;
+
+  dExp := 1;
+  IF (length(p) > 1) THEN
+    BEGIN
+      FOR i:=1 TO length(p) - 1 DO
+        BEGIN
+          dExp := (d * dExp) MOD q;
+        END;
+    END;
+
+  i := 1;
+  j := 1;
+  position := 0;
+  WHILE (position = 0) AND (i <= length(s) - length(p) + 1) DO
+    BEGIN
+      IF hashPattern = hashSearch THEN
+        BEGIN
+          j := 1;
+          WHILE (j <= length(p)) AND (s[i + j - 1] = p[j]) DO
+            BEGIN
+              j := j + 1;
+            END;
+          IF j > length(p) THEN
+            BEGIN
+              position := i;
+            END;
+        END;
+
+      IF (position = 0) THEN
+        BEGIN
+          hashSearch := (hashSearch + q * d - Ord(s[i])*dExp) MOD q;
+          hashSearch := (hashSearch * d) MOD q;
+          hashSearch := (hashSearch + Ord(s[i + length(p)])) MOD q;
+        END;
+
+      i := i + 1;
+    END;
+
+  RabinKarp := position;
+END;
+
+
 TYPE 
   Algorithm = FUNCTION (text, pattern: STRING): byte;
 
@@ -278,4 +336,5 @@ BEGIN
   TestAlgorithm('KnutMorrisPratt', KnutMorrisPratt);
   TestAlgorithm('KnutMorrisPrattOptimised', KnutMorrisPrattOptimised);
   TestAlgorithm('BoyerMoore', BoyerMoore);
+  TestAlgorithm('RabinKarp', RabinKarp);
 END.
