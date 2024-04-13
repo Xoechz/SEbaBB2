@@ -155,3 +155,18 @@ Per KI Richtlinie gebe ich bekannt CoPilot zu verwenden, wobei es zur Formatieru
 Stunden 9
 
 ### UE2
+
+1a
+Da laut Angabe nur Strings mit gleicher Länge übereinstimmen können, kann man jedes Paar dessen Länge nicht übereinstimmt verwerfen und ab einem Unterschied den Vergleich, mit einem negativen Ergebnis, abbrechen. Nach der Annahme, dass jeder Input mit einem $ Symbol abschließt, werden alle Inputs nicht damit enden verworfen.
+
+1b
+In der Angabe ist der Lösungsweg schon fast zur Gänze beschrieben. Es wird ein Zeichen überprüft und wenn dieses übereinstimmt werden die ersten Zeichen der Strings enfernt und die Funktion wieder aufgerufen. Wenn das erste Zeichen ein \* Symbol ist wird die Funktion zweimal aufgerufen, einmal mit verkürztem und einmal mit gleichbleibendem Pattern. Es fehlt dann noch der Fall, dass \* für kein Zeichen steht, dieser kann geprüft werden indem man das Pattern kürzt und den Text gleich lässt.
+
+2a
+Jedes Zeichen des Strings wird in ein Array mit dem Indextyp Char hinzugefügt und der Zähler erhöht. Der Datentyp im Array ist Byte, obwohl für diese Aufgabe Boolean reichen würde, aber für die nächste Aufgabe wird eine Zahl benötigt. Byte wurde gewählt, da ein String nicht länger als 255 Zeichen sein kann, der Ausgabe Datentyp ist wie in der Angabe Integer. Wenn ein Zeichen davor schon in dem Array war wird der Zähler nicht mehr erhöht. Der Zähler wird am Ende ausgegeben. Der Ursprüngliche gedanke wäre eine Liste gewesen, da die Anzahl der Zeichen aber durch den Datentyp Char stark begrenz sind ist die implementierung eines Arrays einfacher und schneller.
+Laut der Angabe werden unterschiedliche Zeichen gezählt, also wird angenommen, dass A nicht das selbe wie a ist.
+
+2b
+Vom ersten Zeichen an wird überprüft wieviele Zeichen nach rechts die M-Ketten Bedingung erfüllen, ab dem nächsten Zeichen wird links von der Kette abgezogen bis die Bedinging wieder erfüllt ist. Dieses Verfahren wird wiederholt bis man am Ende vom String ankommt. Die maximale Länge wird am Ende zurückgegeben.
+
+4 stund

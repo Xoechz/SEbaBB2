@@ -27,5 +27,4 @@ BEGIN
       writeln('No parameters');
       Halt(1);
     END;
-
 END.
