@@ -19,17 +19,17 @@ Excel
 ### Suchalgorithmen
 
 sequenzielle Suche O(n)
-binÃ¤re Suche O(log n)
+binÃƒÂ¤re Suche O(log n)
 
 Ziel O(1)
 
 Hashing
 
-SchlÃ¼ssel wird auf Inex in einem Array gemappt.(z.B. Modulo).
+SchlÃƒÂ¼ssel wird auf Inex in einem Array gemappt.(z.B. Modulo).
 
 Kolisionen werden mithilfe von verkettung(jeder hashtabelleneintrag ist eine liste in der ich weitersuchen muss)
 
-O Notation ist abhÃ¤ngig von der Hashmap GrÃ¶Ã?e
+O Notation ist abhÃƒÂ¤ngig von der Hashmap GrÃƒÂ¶Ãƒ?e
 
 Laufzeit vs. Speicherplatz
 
@@ -39,7 +39,7 @@ Vorsicht bei auswahl der hash methode
 
 ### Suchen in Zeichenketten
 
-Einfache LÃ¶sung DrÃ¼beriterieren = O(n*m)
+Einfache LÃƒÂ¶sung DrÃƒÂ¼beriterieren = O(n*m)
 
 O(n+m) existiert
 
@@ -47,11 +47,11 @@ O(n+m) existiert
 
 ### Datenkapselung
 
-Module geben dem User nur die Proceduren die er benutzen dar zur verfÃ¼gung, alle inneren VorgÃ¤nge und Datenstrukturen sind versteckt. wie private/public.
+Module geben dem User nur die Proceduren die er benutzen dar zur verfÃƒÂ¼gung, alle inneren VorgÃƒÂ¤nge und Datenstrukturen sind versteckt. wie private/public.
 
-VerfÃ¼gbare Procedures sind im Interface hinterlegt.
+VerfÃƒÂ¼gbare Procedures sind im Interface hinterlegt.
 
-In pascal werden dazu Units verwendet. In einem Unit gibt es einen Implementierungs Teil und einen Interface Teil. Wenn sich etwas in der Implementierung Ã?ndert muss man den Code der das Interface nutzt nicht Ã¤ndern.
+In pascal werden dazu Units verwendet. In einem Unit gibt es einen Implementierungs Teil und einen Interface Teil. Wenn sich etwas in der Implementierung Ãƒ?ndert muss man den Code der das Interface nutzt nicht ÃƒÂ¤ndern.
 
 Man kann im Interface auch typen deklarieren.
 
@@ -67,9 +67,9 @@ Abstraktion, herunterbrechen herunterbrechen herunterbrechen.
 
 #### Entwurfsebenen
 
-Subsysteme mit schwacher Kopplung. Kommunizieren Ã¼ber Dateien, Datenbanken und Netzwerke
+Subsysteme mit schwacher Kopplung. Kommunizieren ÃƒÂ¼ber Dateien, Datenbanken und Netzwerke
 
-Diese bestehen aus Modulen mit enger Kopplung die Ã¼ber Aufrufschnittstellen kommunizieren.
+Diese bestehen aus Modulen mit enger Kopplung die ÃƒÂ¼ber Aufrufschnittstellen kommunizieren.
 
 Dies kann man noch auf einzelne Algorithmen zerbrechen.
 
@@ -77,11 +77,11 @@ Bespiel:
 
 Compiler erzeugt aus .pas ein .o file, Linker erstellt daraus eine .exe.
 
-Der Compiler wiederum besteht aus den Modulen Scanner, Parser, Symboltabelle und CodeGenerator. Der Scanner lest zeichen ab dem "BEGIN" ein, der Parser wertet die GÃ¼ltigkeit aus und speichert Variablen in die Symboltabelle und der CodeGenerator erzeugt aus dem Code das Programm.
+Der Compiler wiederum besteht aus den Modulen Scanner, Parser, Symboltabelle und CodeGenerator. Der Scanner lest zeichen ab dem "BEGIN" ein, der Parser wertet die GÃƒÂ¼ltigkeit aus und speichert Variablen in die Symboltabelle und der CodeGenerator erzeugt aus dem Code das Programm.
 
 #### Zerlegungsarten
 
-Man kann eine Anforderung auf 3 Weisen verbessern, je nach Anforderung gibt es gewisse Vor und Nachteile fÃ¼r jede Art.
+Man kann eine Anforderung auf 3 Weisen verbessern, je nach Anforderung gibt es gewisse Vor und Nachteile fÃƒÂ¼r jede Art.
 
 Aufgabenorientiert.
 
@@ -107,7 +107,7 @@ in Schritte brechen
 
 Validation der Instruktionen
 
-NutzeroberflÃ¤che
+NutzeroberflÃƒÂ¤che
 
 Linie Zeichen
 
@@ -117,7 +117,7 @@ Editor
 
 ## 9.3.2024
 
-Alle Ã?bungen machen.
+Alle Ãƒ?bungen machen.
 
 ### Hash table
 
@@ -130,25 +130,25 @@ List vs Array vs Tree => Hashtable gewinnt
 
 #### Hashen
 
-kleines delta a => groÃ?es delta b
+kleines delta a => groÃƒ?es delta b
 
-mÃ¶glichst gleiche Verteilung
+mÃƒÂ¶glichst gleiche Verteilung
 
 ### Zeichenketten suchen
 
-## Übungen
+## Ãœbungen
 
 ### UE1
 
-Zuerst muss eine string GetHashCode Funktion in einem Unit erstellt werden, diese rechnet einen Hashcode aus dem Ordinalwert eines chars und seiner Position aus, indem die Summe jedes Ordinalwertes mal 31 hoch der Position. Dieser Hasing Algorithmus wurde in der Übung kurz als die Lösung die Java verwendet angeschnitten.
+Zuerst muss eine string GetHashCode Funktion in einem Unit erstellt werden, diese rechnet einen Hashcode aus dem Ordinalwert eines chars und seiner Position aus, indem die Summe jedes Ordinalwertes mal 31 hoch der Position. Dieser Hasing Algorithmus wurde in der Ãœbung kurz als die LÃ¶sung die Java verwendet angeschnitten.
 
-Für die zwei verschiedenen Hash-Tabellen Arten werden 2 verschiedene Units(ChainedWordCounter und OpenAdressedWordCounter).
+FÃ¼r die zwei verschiedenen Hash-Tabellen Arten werden 2 verschiedene Units(ChainedWordCounter und OpenAdressedWordCounter).
 
-Das Hinzufügen der Wörter und die Kollisionsvermeidung wird gleich der Übung gemacht, wobei verschiedene Hashtabellengrößen getestet werden(die offen Adressierte Variante hat eine Untergrenze an gültiger Größe. Für die Testfälle wird eine Tabelle mit Zeiten erstellt um den Einfluss der Größe zur Laufzeit zu zeigen, weiters wird auch der genutzte Heap mittels heaptrc gezeigt.
+Das HinzufÃ¼gen der WÃ¶rter und die Kollisionsvermeidung wird gleich der Ãœbung gemacht, wobei verschiedene HashtabellengrÃ¶ÃŸen getestet werden(die offen Adressierte Variante hat eine Untergrenze an gÃ¼ltiger GrÃ¶ÃŸe. FÃ¼r die TestfÃ¤lle wird eine Tabelle mit Zeiten erstellt um den Einfluss der GrÃ¶ÃŸe zur Laufzeit zu zeigen, weiters wird auch der genutzte Heap mittels heaptrc gezeigt.
 
-Um die mehrfach vorkommenden Wörter zu zählen müssen zu jedem Wort die Anzahl an Vorkommnisse gespeichert werden. Dadurch kann später über alle Worte itteriert werden, um alle einmal vorkommenden Worte zu finden, die überbliebenen Worte zu Zählen und das Maximum zu finden.
+Um die mehrfach vorkommenden WÃ¶rter zu zÃ¤hlen mÃ¼ssen zu jedem Wort die Anzahl an Vorkommnisse gespeichert werden. Dadurch kann spÃ¤ter Ã¼ber alle Worte itteriert werden, um alle einmal vorkommenden Worte zu finden, die Ã¼berbliebenen Worte zu ZÃ¤hlen und das Maximum zu finden.
 
-Timer.pas wurde nicht verändert, in WordReader.pas wurde WinCrt entfernt, um das Unit Linux kompatibel zu machen, und der Word Datentyp wurde auf WordString geändert um Namenskonflikte mit dem Pascal Datentyp Word zu verhindern.
+Timer.pas wurde nicht verÃ¤ndert, in WordReader.pas wurde WinCrt entfernt, um das Unit Linux kompatibel zu machen, und der Word Datentyp wurde auf WordString geÃ¤ndert um Namenskonflikte mit dem Pascal Datentyp Word zu verhindern.
 
 Per KI Richtlinie gebe ich bekannt CoPilot zu verwenden, wobei es zur Formatierung und als Autocomplete genutzt wurde.
 
@@ -157,16 +157,15 @@ Stunden 9
 ### UE2
 
 1a
-Da laut Angabe nur Strings mit gleicher Länge übereinstimmen können, kann man jedes Paar dessen Länge nicht übereinstimmt verwerfen und ab einem Unterschied den Vergleich, mit einem negativen Ergebnis, abbrechen. Nach der Annahme, dass jeder Input mit einem $ Symbol abschließt, werden alle Inputs nicht damit enden verworfen.
+Da laut Angabe nur Strings mit gleicher LÃ¤nge Ã¼bereinstimmen kÃ¶nnen, kann man jedes Paar dessen LÃ¤nge nicht Ã¼bereinstimmt verwerfen und ab einem Unterschied den Vergleich, mit einem negativen Ergebnis, abbrechen. Nach der Annahme, dass jeder Input mit einem $ Symbol abschlieÃŸt, werden alle Inputs nicht damit enden verworfen.
 
 1b
-In der Angabe ist der Lösungsweg schon fast zur Gänze beschrieben. Es wird ein Zeichen überprüft und wenn dieses übereinstimmt werden die ersten Zeichen der Strings enfernt und die Funktion wieder aufgerufen. Wenn das erste Zeichen ein \* Symbol ist wird die Funktion zweimal aufgerufen, einmal mit verkürztem und einmal mit gleichbleibendem Pattern. Es fehlt dann noch der Fall, dass \* für kein Zeichen steht, dieser kann geprüft werden indem man das Pattern kürzt und den Text gleich lässt.
+In der Angabe ist der LÃ¶sungsweg schon fast zur GÃ¤nze beschrieben. Es wird ein Zeichen Ã¼berprÃ¼ft und wenn dieses Ã¼bereinstimmt werden die ersten Zeichen der Strings enfernt und die Funktion wieder aufgerufen. Wenn das erste Zeichen ein \* Symbol ist wird die Funktion zweimal aufgerufen, einmal mit verkÃ¼rztem und einmal mit gleichbleibendem Pattern. Es fehlt dann noch der Fall, dass \* fÃ¼r kein Zeichen steht, dieser kann geprÃ¼ft werden indem man das Pattern kÃ¼rzt und den Text gleich lÃ¤sst.
 
 2a
-Jedes Zeichen des Strings wird in ein Array mit dem Indextyp Char hinzugefügt und der Zähler erhöht. Der Datentyp im Array ist Byte, obwohl für diese Aufgabe Boolean reichen würde, aber für die nächste Aufgabe wird eine Zahl benötigt. Byte wurde gewählt, da ein String nicht länger als 255 Zeichen sein kann, der Ausgabe Datentyp ist wie in der Angabe Integer. Wenn ein Zeichen davor schon in dem Array war wird der Zähler nicht mehr erhöht. Der Zähler wird am Ende ausgegeben. Der Ursprüngliche gedanke wäre eine Liste gewesen, da die Anzahl der Zeichen aber durch den Datentyp Char stark begrenz sind ist die implementierung eines Arrays einfacher und schneller.
-Laut der Angabe werden unterschiedliche Zeichen gezählt, also wird angenommen, dass A nicht das selbe wie a ist.
+Jedes Zeichen des Strings wird in ein Array mit dem Indextyp Char hinzugefÃ¼gt und der ZÃ¤hler erhÃ¶ht. Der Datentyp im Array ist Byte, obwohl fÃ¼r diese Aufgabe Boolean reichen wÃ¼rde, aber fÃ¼r die nÃ¤chste Aufgabe wird eine Zahl benÃ¶tigt. Byte wurde gewÃ¤hlt, da ein String nicht lÃ¤nger als 255 Zeichen sein kann, der Ausgabe Datentyp ist wie in der Angabe Integer. Wenn ein Zeichen davor schon in dem Array war wird der ZÃ¤hler nicht mehr erhÃ¶ht. Der ZÃ¤hler wird am Ende ausgegeben. Der UrsprÃ¼ngliche gedanke wÃ¤re eine Liste gewesen, da die Anzahl der Zeichen aber durch den Datentyp Char stark begrenz sind ist die implementierung eines Arrays einfacher und schneller.
+Laut der Angabe werden unterschiedliche Zeichen gezÃ¤hlt, also wird angenommen, dass A nicht das selbe wie a ist.
 
 2b
-Vom ersten Zeichen an wird überprüft wieviele Zeichen nach rechts die M-Ketten Bedingung erfüllen, ab dem nächsten Zeichen wird links von der Kette abgezogen bis die Bedinging wieder erfüllt ist. Dieses Verfahren wird wiederholt bis man am Ende vom String ankommt. Die maximale Länge wird am Ende zurückgegeben.
-
-4 stund
+Vom ersten Zeichen an wird Ã¼berprÃ¼ft wieviele Zeichen nach rechts die M-Ketten Bedingung erfÃ¼llen, ab dem nÃ¤chsten Zeichen wird links von der Kette abgezogen bis die Bedinging wieder erfÃ¼llt ist. Dieses Verfahren wird wiederholt bis man am Ende vom String ankommt. Die maximale LÃ¤nge wird am Ende zurÃ¼ckgegeben.
+Stunden: 9
