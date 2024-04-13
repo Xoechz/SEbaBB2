@@ -136,7 +136,38 @@ mÃƒÂ¶glichst gleiche Verteilung
 
 ### Zeichenketten suchen
 
-## Ãœbungen
+Vergleiche verschiedener Algorithmen, siehe Pascal Code.
+
+## 13.4.2024
+
+### Dateimanagement
+
+![Ablauf Filehandling](Pictures/ADF3.jpg)
+
+Alles ist ein File, man kann auf Geräte über spezielle Files zugreifen.
+
+Standardfilehandles
+
+0 => Stdout
+1 => Stdin
+2 => Stderr
+
+Funktioniert bei jedem OS gleich
+0, 1 und 2 kann man nicht closen.
+Umleitungen wiederholt.
+
+File of Typ
+
+BlockRead und Write für Copy Programm.
+
+### Abstrakte Datenstrukturen
+
+Implementierung versteckt sich hinter einem Interface.
+DOKUMENTATION
+
+Stackbeispiel
+
+## Üœbungen
 
 ### UE1
 
@@ -169,3 +200,9 @@ Laut der Angabe werden unterschiedliche Zeichen gezÃ¤hlt, also wird angenommen, 
 2b
 Vom ersten Zeichen an wird Ã¼berprÃ¼ft wieviele Zeichen nach rechts die M-Ketten Bedingung erfÃ¼llen, ab dem nÃ¤chsten Zeichen wird links von der Kette abgezogen bis die Bedinging wieder erfÃ¼llt ist. Dieses Verfahren wird wiederholt bis man am Ende vom String ankommt. Die maximale LÃ¤nge wird am Ende zurÃ¼ckgegeben.
 Stunden: 9
+
+### UE3
+
+Linebuffer list of string => Extended string => ansteuerbar wie normaler string
+während Einlesen breite verdoppeln/verringern(möglichen reststring speichern und beim nächsten lesen verwendten, runden bei zeilenende) => So oft ausgeben wie höhe verdoppelt wird
+Zeilen je nach höhenverringerung auslassen
