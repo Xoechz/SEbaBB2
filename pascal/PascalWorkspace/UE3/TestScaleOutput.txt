@@ -1,0 +1,199 @@
+No parameters
+Usage: Scale [OPTION] inFile outFile
+   inFile: input file.
+   outFile: output file.
+   -x sx: scale in the x direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   -y sy: scale in the y direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   --help: display this help and exit.
+
+No optional parameters
+File scaled successfully.
+
+X optional parameter
+File scaled successfully.
+
+Y optional parameter
+File scaled successfully.
+
+X and Y optional parameters
+File scaled successfully.
+
+Y and X optional parameters
+File scaled successfully.
+
+X and Y optional parameters with different signs
+File scaled successfully.
+
+Wrong optional parameter
+Usage: Scale [OPTION] inFile outFile
+   inFile: input file.
+   outFile: output file.
+   -x sx: scale in the x direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   -y sy: scale in the y direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   --help: display this help and exit.
+
+Too many optional parameters
+Usage: Scale [OPTION] inFile outFile
+   inFile: input file.
+   outFile: output file.
+   -x sx: scale in the x direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   -y sy: scale in the y direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   --help: display this help and exit.
+
+No file parameters
+Usage: Scale [OPTION] inFile outFile
+   inFile: input file.
+   outFile: output file.
+   -x sx: scale in the x direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   -y sy: scale in the y direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   --help: display this help and exit.
+
+One file parameter
+Usage: Scale [OPTION] inFile outFile
+   inFile: input file.
+   outFile: output file.
+   -x sx: scale in the x direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   -y sy: scale in the y direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   --help: display this help and exit.
+
+Invalid input file
+Error while opening input file.
+Error code: 2
+
+X = 0
+Usage: Scale [OPTION] inFile outFile
+   inFile: input file.
+   outFile: output file.
+   -x sx: scale in the x direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   -y sy: scale in the y direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   --help: display this help and exit.
+Invalid scale value for x direction.
+
+X = 10
+Usage: Scale [OPTION] inFile outFile
+   inFile: input file.
+   outFile: output file.
+   -x sx: scale in the x direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   -y sy: scale in the y direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   --help: display this help and exit.
+Invalid scale value for x direction.
+
+X = -10
+Usage: Scale [OPTION] inFile outFile
+   inFile: input file.
+   outFile: output file.
+   -x sx: scale in the x direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   -y sy: scale in the y direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   --help: display this help and exit.
+Invalid scale value for x direction.
+
+Y = 0
+Usage: Scale [OPTION] inFile outFile
+   inFile: input file.
+   outFile: output file.
+   -x sx: scale in the x direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   -y sy: scale in the y direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   --help: display this help and exit.
+Invalid scale value for y direction.
+
+Y = 10
+Usage: Scale [OPTION] inFile outFile
+   inFile: input file.
+   outFile: output file.
+   -x sx: scale in the x direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   -y sy: scale in the y direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   --help: display this help and exit.
+Invalid scale value for y direction.
+
+Y = -10
+Usage: Scale [OPTION] inFile outFile
+   inFile: input file.
+   outFile: output file.
+   -x sx: scale in the x direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   -y sy: scale in the y direction. Default 1. Allowed values: -9 to -2, 2 to 9.
+   --help: display this help and exit.
+Invalid scale value for y direction.
+
+X = 1, Y = 1
+File scaled successfully.
+
+X = 2, Y = 1
+File scaled successfully.
+
+X = 1, Y = 2
+File scaled successfully.
+
+X = 2, Y = 2
+File scaled successfully.
+
+Y = 2, X = 2
+File scaled successfully.
+
+X = -2, Y = 1
+File scaled successfully.
+
+X = 1, Y = -2
+File scaled successfully.
+
+X = -2, Y = -2
+File scaled successfully.
+
+Y = -2, X = -2
+File scaled successfully.
+
+X = 2, Y = -2
+File scaled successfully.
+
+X = -2, Y = 2
+File scaled successfully.
+
+Y = 2, X = -2
+File scaled successfully.
+
+Y = -2, X = 2
+File scaled successfully.
+
+Scale by -9
+File scaled successfully.
+
+Scale by -8
+File scaled successfully.
+
+Scale by -7
+File scaled successfully.
+
+Scale by -6
+File scaled successfully.
+
+Scale by -5
+File scaled successfully.
+
+Scale by -4
+File scaled successfully.
+
+Scale by -3
+File scaled successfully.
+
+Scale by 3
+File scaled successfully.
+
+Scale by 4
+File scaled successfully.
+
+Scale by 5
+File scaled successfully.
+
+Scale by 6
+File scaled successfully.
+
+Scale by 7
+File scaled successfully.
+
+Scale by 8
+File scaled successfully.
+
+Scale by 9
+File scaled successfully.
+
+BIG FILE
+File scaled successfully.

@@ -203,6 +203,14 @@ Stunden: 9
 
 ### UE3
 
-Linebuffer list of string => Extended string => ansteuerbar wie normaler string
-während Einlesen breite verdoppeln/verringern(möglichen reststring speichern und beim nächsten lesen verwendten, runden bei zeilenende) => So oft ausgeben wie höhe verdoppelt wird
-Zeilen je nach höhenverringerung auslassen
+Ein LineBuffer wird erstellt, der alle hinzugefügten STRINGS mithilfe einer verketteten Liste hintereinander hängt. Zuerst wäre eine Trennung der hinzugefügten STRINGS, um den Platz des Buffers optimal auszunutzen, vorgesehen. Da aber durch das Read() eines Files 255 Zeichen lange STRINGS gelesen werden, mit der einzigen Ausnahmen am Ende einer Zeile, und da die Implementierung noch Fehler beinhaltete, wurde diese Behandlung wieder gestrichen.
+
+Beim Lesen der Datei wird jede Zeile zuerst in den LineBuffer eingelesen und dann beim Schreiben skaliert, indem entweder jedes x-te Zeichen geschrieben wird oder jedes Zeichen x-mal geschrieben wird.
+
+Die Skalierung in Y Richtung funktioniert ähnlich, nur statt Zeichen werden ganze Zeilen ansgelassen oder vervielfacht.
+
+Eingabe Parameter werden durchlaufen und mit mehreren Verzweigungen überprüft um die Optionalität und Reihenfolge der einzelnen Parametern zu gewärleisten. Falls das Programm falsch aufgerufen wird, wird eine Help Ausgabe angezeigt um den User über die richtige Verwendung zu informieren.
+
+Die Tests sind in einem shell Script geschrieben und via "./TestScale.sh &> ./TestScaleOutput.txt" aufgerufen.
+
+Stunden: 6
