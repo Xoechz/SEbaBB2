@@ -1,0 +1,57 @@
+PROGRAM TestStackADS;
+
+USES StackADS2;
+VAR 
+  ok : boolean;
+  value : integer;
+BEGIN
+  Writeln('Test Stack');
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(1, ok);
+  Writeln('Push 1: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(2, ok);
+  Writeln('Push 2: ', ok);
+  Pop(value,ok);
+  Writeln('Pop 2: ', value, ' ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Pop(value,ok);
+  Writeln('Pop 1: ', value, ' ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Pop(value,ok);
+  Writeln('Pop FALSE: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(1, ok);
+  Writeln('Push 1: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(2, ok);
+  Writeln('Push 2: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(3, ok);
+  Writeln('Push 3: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(4, ok);
+  Writeln('Push 4: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(5, ok);
+  Writeln('Push 5: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(6, ok);
+  Writeln('Push 6: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(7, ok);
+  Writeln('Push 7: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(8, ok);
+  Writeln('Push 8: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(9, ok);
+  Writeln('Push 9: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(10, ok);
+  Writeln('Push 10: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+  Push(11, ok);
+  Writeln('Push 11: ', ok);
+  Writeln('IsEmpty: ',IsEmpty);
+END.
