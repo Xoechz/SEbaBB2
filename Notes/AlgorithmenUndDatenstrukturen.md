@@ -144,7 +144,7 @@ Vergleiche verschiedener Algorithmen, siehe Pascal Code.
 
 ![Ablauf Filehandling](Pictures/ADF3.jpg)
 
-Alles ist ein File, man kann auf Ger�te �ber spezielle Files zugreifen.
+Alles ist ein File, man kann auf Ger�te �ber spezielle Files zugreifen.
 
 Standardfilehandles
 
@@ -158,7 +158,7 @@ Umleitungen wiederholt.
 
 File of Typ
 
-BlockRead und Write f�r Copy Programm.
+BlockRead und Write f�r Copy Programm.
 
 ### Abstrakte Datenstrukturen
 
@@ -167,7 +167,7 @@ DOKUMENTATION
 
 Stackbeispiel
 
-## ܜbungen
+## Übungen
 
 ### UE1
 
@@ -203,14 +203,44 @@ Stunden: 9
 
 ### UE3
 
-Ein LineBuffer wird erstellt, der alle hinzugef�gten STRINGS mithilfe einer verketteten Liste hintereinander h�ngt. Zuerst w�re eine Trennung der hinzugef�gten STRINGS, um den Platz des Buffers optimal auszunutzen, vorgesehen. Da aber durch das Read() eines Files 255 Zeichen lange STRINGS gelesen werden, mit der einzigen Ausnahmen am Ende einer Zeile, und da die Implementierung noch Fehler beinhaltete, wurde diese Behandlung wieder gestrichen.
+Ein LineBuffer wird erstellt, der alle hinzugef�gten STRINGS mithilfe einer verketteten Liste hintereinander h�ngt. Zuerst w�re eine Trennung der hinzugef�gten STRINGS, um den Platz des Buffers optimal auszunutzen, vorgesehen. Da aber durch das Read() eines Files 255 Zeichen lange STRINGS gelesen werden, mit der einzigen Ausnahmen am Ende einer Zeile, und da die Implementierung noch Fehler beinhaltete, wurde diese Behandlung wieder gestrichen.
 
 Beim Lesen der Datei wird jede Zeile zuerst in den LineBuffer eingelesen und dann beim Schreiben skaliert, indem entweder jedes x-te Zeichen geschrieben wird oder jedes Zeichen x-mal geschrieben wird.
 
-Die Skalierung in Y Richtung funktioniert �hnlich, nur statt Zeichen werden ganze Zeilen ansgelassen oder vervielfacht.
+Die Skalierung in Y Richtung funktioniert �hnlich, nur statt Zeichen werden ganze Zeilen ansgelassen oder vervielfacht.
 
-Eingabe Parameter werden durchlaufen und mit mehreren Verzweigungen �berpr�ft um die Optionalit�t und Reihenfolge der einzelnen Parametern zu gew�rleisten. Falls das Programm falsch aufgerufen wird, wird eine Help Ausgabe angezeigt um den User �ber die richtige Verwendung zu informieren.
+Eingabe Parameter werden durchlaufen und mit mehreren Verzweigungen �berpr�ft um die Optionalit�t und Reihenfolge der einzelnen Parametern zu gew�rleisten. Falls das Programm falsch aufgerufen wird, wird eine Help Ausgabe angezeigt um den User �ber die richtige Verwendung zu informieren.
 
 Die Tests sind in einem shell Script geschrieben und via "./TestScale.sh &> ./TestScaleOutput.txt" aufgerufen.
 
 Stunden: 6
+
+### UE4
+
+Die Implementierung von ADS und ADT sind sich sehr ähnlich, daher wird nur die Idee des ADS beschrieben und dann zu ADT angepasst.
+
+Um mithilfe von Add einen Werten "hinten" anzuhängen wird er an dem erste freien Index gespeichert. Der letzte Index wird für die size gespeichert und nach dem Add upgeadated. Wenn die Kapazität überschritten wird, muss das Array "erweitert" werden.
+
+Die Erweiterung wird schon in der Angabe vorgegeben, es wird ein größeres Array angelegt und jeder Wert wird dort hineinkopiert.
+
+SetElementAt setzt das Element an einem Index auf den mitgegebenen Wert. Durch die Anforderung der RemoveElementAt Prozedur wird angenommen, dass man damit nur Werte bearbeiten kann und keine hinzugefügt werden.
+
+ElementAt gibt den Wert an dem gegebenen Index zurück, wenn kein Element am Index existiert wird mithilfe von einem Rückgabewert ein FALSE zurückgegeben. Durch den Rückgabeparameter ok, wird ElementAt zu einer Prozedur.
+
+RemoveElementAt rückt die Werte nach dem Index um eines nach vorne und verdrängt dadurch den Wert. Die Behandlung nicht existenter Elemente ist gleich wie bei ElementAt.
+
+Size und Capacity geben einfach gespeicherte Werte des Vektors zurück. Size gibt den aktuellen Index
+
+Die Testfälle der einzelnen Units werden an Unit Tests angelehnt. Um den Zustand der Abstraken Datenstruktur wieder zurückzusetzen, wird eine Clear Prozedur zum Interface hinzugefügt. Diese ist kein Dispose da die ADS kein Dispose benötigt.
+
+Für den abstrakten Datentypen wird die abstrakte Datenstruktur kopiert und wie in der Übung angepasst.
+
+Size und Capacity bleiben Funktionen obwohl die einen VAR Parameter besitzen, da keine Seiteneffekte bestehen und der Parameter nur Var ist um das Element nicht zu kopiern.
+
+Ein Test für die geichzeitige Verwendung von Vektoren wird zusätzlich hinzugefügt.
+
+Die Queue nutzt den Vektor als Basis.
+
+Enqueue ruft ein Add auf, IsEmpty schaut ob die Size 0 ist und Dequeue ruft RemoveElementAt(1) auf.
+
+Stunden: 9
