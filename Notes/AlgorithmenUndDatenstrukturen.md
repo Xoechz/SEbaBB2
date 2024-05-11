@@ -167,6 +167,50 @@ DOKUMENTATION
 
 Stackbeispiel
 
+## 11.5.2024
+
+### Gramatik
+
+Wieder die Frage, was ist eine Sprache?
+
+Menge von Sätzen(endlich => auflistung, unendlich => Beschreibung für aufbau)
+
+Satz => Konstrukt für Informationsübermittlung
+
+Besteht aus Vokabeln/Symbole, die nach einer Gramatik aufgebaut sind und damit eine Semantik übermitteln
+
+Das erste, dass ein Kind lernt ist Phonetik(Aussprache von Wörtern)
+
+Danach erst die Semantik und am Schluss die Gramatik.
+
+![Intressante Studie die das auch hinterfragt](https://direct.mit.edu/opmi/article/doi/10.1162/opmi_a_00039/97495/SAYCam-A-Large-Longitudinal-Audiovisual-Dataset)
+
+Zeichen müssen noch keinen Sinn ergeben
+
+a + 3 => ungültig da wir keine Buchstaben haben
+
+2 3 + => gültig da wir noch keinen Syntax haben
+
+### Taschenrechner
+
+Was sind undere Terminalsymbole/Klassen
+
+Zahlen(Bestehen aus Ziffern, Terminalklasse),
+
+Operationen(+-*/),
+
+Klammern(())
+
+Code ist auch in Repo
+
+#### Nonterminal Symbole
+
+Expr = Term { plus Term | minus Term }
+
+Term = Fact { mult Fact | div Fact }
+
+Fact = \[ +, - \] ( number | leftPar Expr rightPar )
+
 ## Übungen
 
 ### UE1
