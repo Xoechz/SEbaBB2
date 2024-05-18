@@ -203,13 +203,75 @@ Klammern(())
 
 Code ist auch in Repo
 
-#### Nonterminal Symbole
+#### Nonterminal Symbole TR
 
 Expr = Term { plus Term | minus Term }
 
 Term = Fact { mult Fact | div Fact }
 
 Fact = \[ +, - \] ( number | leftPar Expr rightPar )
+
+## 18.5.2024
+
+### Minipascal
+
+#### Keywords MP
+
+PROGRAM, BEGIN, END, VAR, READ, WRITE, INTEGER
+
+#### Terminalklassen MP
+
+ident = \[A-Za-z_\]\[A-Za-z0-9_\]*
+
+number = \[0-9\]+
+
+#### Einfache Terminalsymbole MP
+
+semicolon ;
+
+plus +
+
+minus -
+
+assign :=
+
+mult *
+
+div /
+
+leftPar \(
+  
+rightPar \)
+
+comma ,
+
+period .
+
+colon :
+
+Assign ist ein eigens Zeichen statt eine Kombination aus : und =, da der Syntax so leichter und leserlicher wird und da man :{Line break}= verbieten kann.
+
+### Nonterminal Symbole MP
+
+MP = PROGRAM ident semicolon VarBlock BEGIN StatementSeq END period.
+
+VarBlock = \[VAR Variable {Variable}\]
+
+Variable = ident {comma ident} colon INTEGER semicolon.
+
+StatementSeq = Statement { semicolon Statement }
+
+Statement = \[ READ leftPar ident rightPar | WRITE leftPar Expr rightPar | ident assign Expr \]
+
+Expr = Term { plus Term | minus Term }
+
+Term = Fact { mult Fact | div Fact }
+
+Fact = \[ +, - \] ( number | ident | leftPar Expr rightPar )
+
+### Symbol Table MP
+
+Wird verwendet um Variablen zu tracken. Code von Moodle.
 
 ## Übungen
 
@@ -288,3 +350,25 @@ Die Queue nutzt den Vektor als Basis.
 Enqueue ruft ein Add auf, IsEmpty schaut ob die Size 0 ist und Dequeue ruft RemoveElementAt(1) auf.
 
 Stunden: 9
+
+### UE5
+
+Für die EBNF wird das Latex package "naive-ebnf" verwendet.
+
+Für die erste Angabe wird angenommen das die Ausgabe direkt mit Write() ausgegeben wird, also nicht als STRING zurückgegeben.
+
+Jede Zeile besteht aus einem Namen(Player), zwei Klammern(leftPar, rightPar) und den Ereignissen(Event) dazwischen.
+
+Ein Ereigniss ist entweder ein Tor oder eine Strafe, gefolgt von einer Uhrzeit(time) und bei der Strafe eine Minutenanzahl(number).
+
+Nach heder Zeile wird diese ausgegeben und eine Summe an Strafminuten wird weitergegeben um diese am Schluss auszugeben.
+
+Es wird angenommen, dass die Großkleinschreibung bei Namen egal ist und keine Sonderzeichen erlaub sind.
+
+#### Keywords UE5
+
+TOR, STRAFE
+
+#### Terminalklassen UE5
+
+Name =
