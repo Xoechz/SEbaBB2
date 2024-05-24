@@ -365,10 +365,54 @@ Nach heder Zeile wird diese ausgegeben und eine Summe an Strafminuten wird weite
 
 Es wird angenommen, dass die Großkleinschreibung bei Namen egal ist und keine Sonderzeichen erlaub sind.
 
+Die Minutenanzahl ist durch Overtime nur an zweistellige Werte begrenzt.
+
 #### Keywords UE5
 
 TOR, STRAFE
 
 #### Terminalklassen UE5
 
-Name =
+name = \[A-Z,a-z\]
+
+digit = \[0-9\]
+
+number = digit {digit}
+
+time = digit digit ':' digit digit
+
+#### Terminalsymbole UE5
+
+leftPar = (
+rightPar = )
+comma = ,
+
+#### Nonterminalklassen UE5
+
+Report = {Player}
+
+Player = name leftPar \[Event {comma Event}\] rightpar
+
+Event = TOR time | STRAFE time number
+
+#### Binärbaum UE5
+
+Für den Binärbaum wird die bereits vorhandene Grammatik und der Code der Übung übernommen und angepasst.
+
+Der Baum wird in einem eigenen Unit implementiert um die verschiedenen Ausgabearten unabhängig zu implementieren. Der Datentyp wird nicht besonders versteckt.
+
+Die Ausgabe wird rekursiv in der angegebenen Reihenfolge implementiert.
+
+Die Id für den Graphen wird direkt im Parser erstellt. Der Graph selbst wird rekursiv mit einer definierten Eingangsfunktion erstellt, wobei zuerst die Labels und danach die Edges erstellt werden. Der Graph wird direkt ausgegeben.
+
+#### Testfälle
+
+InvalidFile
+
+Syntax Error
+
+Div/Null
+
+Easy Expr
+
+Difficult Expr
