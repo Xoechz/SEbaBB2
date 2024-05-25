@@ -273,6 +273,16 @@ Fact = \[ +, - \] ( number | ident | leftPar Expr rightPar )
 
 Wird verwendet um Variablen zu tracken. Code von Moodle.
 
+## 25.5.2024
+
+Heute Compiler
+
+Infix, Präfix und Postfix rechnen
+
+Stack TR exkurs
+
+Befehlssatz der VM mit Stack, Storage, Program und Console
+
 ## Übungen
 
 ### UE1
@@ -405,7 +415,7 @@ Die Ausgabe wird rekursiv in der angegebenen Reihenfolge implementiert.
 
 Die Id für den Graphen wird direkt im Parser erstellt. Der Graph selbst wird rekursiv mit einer definierten Eingangsfunktion erstellt, wobei zuerst die Labels und danach die Edges erstellt werden. Der Graph wird direkt ausgegeben.
 
-#### Testfälle
+#### Testfälle UE5
 
 InvalidFile
 
