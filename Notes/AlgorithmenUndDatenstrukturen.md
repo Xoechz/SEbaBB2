@@ -283,6 +283,10 @@ Stack TR exkurs
 
 Befehlssatz der VM mit Stack, Storage, Program und Console
 
+## 1.6.2024
+
+Heit gibts ka Mitschrift weis mi net zaht hot lol.
+
 ## Übungen
 
 ### UE1

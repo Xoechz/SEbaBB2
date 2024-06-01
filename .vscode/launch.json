@@ -6,6 +6,9 @@
       "type": "f5anything",
       "request": "launch",
       "command": "cd ${fileDirname}/bin && ./${fileBasenameNoExtension}",
+      "windows": {
+        "command": "cd ${fileDirname}\\bin && ${fileBasenameNoExtension}.exe"
+      },
       "terminalName": "EPE - Pascal Output",
       "terminalIndex": -1,
       "showTerminal": true,
