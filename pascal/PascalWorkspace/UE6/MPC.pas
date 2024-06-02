@@ -1,61 +1,111 @@
 PROGRAM MPC;
 
 USES
-MpCompiler;
+MpParser, CodeInt, CodeDef;
 
-VAR 
-  inputFile: text;
-  errorCode: Byte;
-  ok: boolean;
-  errorCol, errorLine: integer;
-  errMessage, outputFileName: string;
-BEGIN
-  IF (ParamCount < 1) OR (ParamCount > 2) THEN
-    BEGIN
-      WriteLn('Usage: mpc <input file> [<output file>]');
-      Halt(1);
-    END;
+PROCEDURE ShowHelp;
+BEGIN (* ShowHelp *)
+  WriteLn('Usage: MPC [OPTION] inFile');
+  WriteLn('   inFile: input file.');
+  WriteLn('   -c compile only. Does not execute the compiled file. Cannot be used with -e.');
+  WriteLn('   -e execute only. Needs a compiled file as input. Cannot be used with -c.');
+  WriteLn('   --help: display this help and exit.');
+END; (* ShowHelp *)
 
-  Assign(inputFile, ParamStr(1));
-  {$I-}
-  Reset(inputFile);
-  {$I+}
-  errorCode := IOResult;
-  IF errorCode <> 0 THEN
-    BEGIN
-      WriteLn('Error opening input file: ', ParamStr(1), ' (error code: ', errorCode, ')');
-      Halt(1);
-    END;
+PROCEDURE GetParameters(VAR execute, compile: BOOLEAN; VAR inFileName: STRING);
+BEGIN (* GetParameters *)
+  IF (ParamCount < 1) OR (ParamCount > 2) OR (ParamStr(1) = '--help') THEN
+    BEGIN (* IF *)
+      ShowHelp();
+      HALT(1);
+    END; (* IF *)
 
-  IF ParamCount = 2 THEN
+  IF (ParamCount = 1) THEN
     BEGIN
-      outputFileName :=  ParamStr(2);
+      execute := TRUE;
+      compile := TRUE;
+      inFileName := ParamStr(1);
     END
   ELSE
-    BEGIN
-      outputFileName := ParamStr(1) + 'c';
-    END;
-
-  errorCode := IOResult;
-  IF errorCode <> 0 THEN
-    BEGIN
-      WriteLn('Error opening output file: ', ParamStr(1), ' (error code: ', errorCode, ')');
-      Halt(1);
-    END;
-
-  Parse(inputFile, ok, errorLine, errorCol, errMessage, outputFileName);
-  Close(inputFile);
-  IF ok THEN
-    BEGIN
-      WriteLn('Compilation completed.')
-    END
-  ELSE
-    IF errMessage <> '' THEN
+    IF (ParamStr(1) = '-c') THEN
       BEGIN
-        WriteLn('Error: ', errMessage, ' at line ', errorLine, ' column ', errorCol);
+        IF (ParamStr(2) = '-e') THEN
+          BEGIN
+            WriteLn('Error: -c and -e cannot be used together.');
+            HALT(1);
+          END;
+
+        execute := FALSE;
+        compile := TRUE;
+        inFileName := ParamStr(2);
+      END
+  ELSE
+    IF (ParamStr(1) = '-e') THEN
+      BEGIN
+        IF (ParamStr(2) = '-c') THEN
+          BEGIN
+            WriteLn('Error: -e and -c cannot be used together.');
+            HALT(1);
+          END;
+
+        execute := TRUE;
+        compile := FALSE;
+        inFileName := ParamStr(2);
       END
   ELSE
     BEGIN
-      WriteLn('Syntax error at line ', errorLine, ' column ', errorCol);
+      ShowHelp();
+      HALT(1);
+    END;
+END; (* GetParameters *)
+
+VAR 
+  ok, execute, compile: boolean;
+  errorCol, errorLine: integer;
+  errMessage, outFileName, inFileName: string;
+  code: CodeArray;
+BEGIN
+  GetParameters(execute, compile, inFileName);
+
+  outFileName := inFileName + 'c';
+
+  IF (compile) THEN
+    BEGIN
+      Parse(inFileName, ok, errorLine, errorCol, errMessage, code);
+
+      IF ok THEN
+        BEGIN
+          StoreCode(outFileName, code);
+          WriteLn('Compilation completed.')
+        END
+      ELSE
+        IF (errMessage <> '') THEN
+          BEGIN
+            WriteLn('Error: ', errMessage, ' at line ', errorLine, ' column ', errorCol);
+            execute := FALSE;
+          END
+      ELSE
+        BEGIN
+          WriteLn('Syntax error at line ', errorLine, ' column ', errorCol);
+          execute := FALSE;
+        END;
+    END;
+
+  IF (execute) THEN
+    BEGIN
+      IF (NOT compile) THEN
+        BEGIN
+          LoadCode(inFileName, code, ok);
+        END;
+
+      IF (ok) THEN
+        BEGIN
+          InterpretCode(code);
+        END
+      ELSE
+        BEGIN
+          WriteLn('Error loading compiled file.');
+          HALT(1);
+        END;
     END;
 END.

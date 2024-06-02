@@ -1,14 +1,17 @@
 
-UNIT MpCompiler;
+UNIT MpParser;
 
 INTERFACE
 
-PROCEDURE Parse(VAR inputFile: text; VAR ok: boolean; VAR errorLine, errorCol: integer; VAR errorMessage: STRING; outputFileName: STRING);
+USES
+CodeDef;
+
+PROCEDURE Parse(inFileName: STRING; VAR ok: boolean; VAR errorLine, errorCol: integer; VAR errorMessage: STRING; VAR code: CodeArray);
 
 IMPLEMENTATION
 
 USES
-MpScanner, SymTblC, CodeGen, CodeDef;
+MpScanner, SymTblC, CodeGen, ExpressionParser, ExpressionTree;
 
 VAR 
   success: boolean;
@@ -20,28 +23,120 @@ BEGIN
   errMessage := message;
 END;
 
-PROCEDURE MP(outputFileName: STRING); Forward;
+PROCEDURE EmitCodeForExprNode(t: TreePtr);
+VAR 
+  n: integer;
+  errorCode: WORD;
+  errorCodeString: STRING;
+BEGIN
+  IF (t <> NIL) THEN
+    BEGIN
+      EmitCodeForExprNode(t^.left);
+      EmitCodeForExprNode(t^.right);
+
+      IF (Length(t^.val) = 0) THEN
+        BEGIN
+          SemErr('Invalid Expression Node');
+          exit;
+        END;
+
+      IF (t^.isNumber) THEN
+        BEGIN
+          Val(t^.val, n, errorCode);
+          IF (errorCode <> 0) THEN
+            BEGIN
+              Str(errorCode, errorCodeString);
+              SemErr(Concat('Invalid Number ', t^.val, ' (Error Code: ', errorCodeString, ')'));
+              exit;
+            END;
+          Emit2(LoadConstOpc, n);
+        END
+      ELSE
+        IF (t^.val = '+') THEN
+          BEGIN
+            Emit1(AddOpc)
+          END
+      ELSE
+        IF (t^.val = '-') THEN
+          BEGIN
+            Emit1(SubOpc)
+          END
+      ELSE
+        IF (t^.val = '*') THEN
+          BEGIN
+            Emit1(MulOpc)
+          END
+      ELSE
+        IF (t^.val = '/') THEN
+          BEGIN
+            Emit1(DivOpc)
+          END
+      ELSE
+        BEGIN
+          Emit2(LoadValOpc, AddressOF(t^.val));
+        END
+    END;
+END;
+
+PROCEDURE EmitCodeForExprTree(t: TreePtr);
+VAR 
+  ok: boolean;
+BEGIN
+  PrintTreePostOrder(t);
+  WriteLn();
+  OptimizeTree(t, ok);
+  PrintTreePostOrder(t);
+  WriteLn();
+
+  IF NOT ok THEN
+    BEGIN
+      SemErr('Division by zero in expression.');
+      DisposeTree(t);
+      Exit;
+    END;
+
+  EmitCodeForExprNode(t);
+  DisposeTree(t);
+END;
+
+PROCEDURE MP(VAR code: CodeArray); Forward;
 PROCEDURE VarBlock; Forward;
 PROCEDURE Variable; Forward;
 PROCEDURE StatementSeq; Forward;
 PROCEDURE Statement; Forward;
-PROCEDURE Expr; Forward;
-PROCEDURE Term; Forward;
-PROCEDURE Fact; Forward;
 
-PROCEDURE Parse(VAR inputFile: text; VAR ok: boolean; VAR errorLine, errorCol: integer; VAR errorMessage: STRING; outputFileName: STRING);
+PROCEDURE Parse(inFileName: STRING; VAR ok: boolean; VAR errorLine, errorCol: integer; VAR errorMessage: STRING; VAR code: CodeArray);
+VAR 
+  inputFile: Text;
+  errCodeStr: STRING;
 BEGIN
   success := TRUE;
   errMessage := '';
+
+  Assign(inputFile, inFileName);
+  {$I-}
+  Reset(inputFile);
+  {$I+}
+  errorCode := IOResult;
+
+  IF (errorCode <> 0) THEN
+    BEGIN
+      str(errorCode, errCodeStr);
+      errorMessage := Concat('Error opening input file: ', inFileName, ' (error code: ', errCodeStr, ')');
+      ok := FALSE;
+      errorCol := 0;
+      errorLine := 0;
+      EXIT;
+    END;
+
   InitScanner(inputFile);
-  MP(outputFileName);
+  MP(code);
   ok := success;
   GetCurrentSymbolPosition(errorLine, errorCol);
   errorMessage := errMessage;
 END;
 
-PROCEDURE MP(outputFileName: STRING);
-{local}VAR ca: CodeArray;{endlocal}
+PROCEDURE MP(VAR code: CodeArray);
 BEGIN
   IF GetCurrentSymbol() <> programSym THEN
     BEGIN
@@ -104,8 +199,7 @@ BEGIN
 
   {sem}
   Emit1(endOpc);
-  GetCode(ca);
-  StoreCode(outputFileName, ca);
+  GetCode(code);
   {endsem}
 END;
 
@@ -210,7 +304,12 @@ BEGIN
 END;
 
 PROCEDURE Statement;
-{local}VAR identName: STRING;{endlocal}
+{local}
+VAR 
+  identName: STRING;
+  addr1, addr2: INTEGER;
+  exprTree: TreePtr;
+{endlocal}
 BEGIN
   CASE GetCurrentSymbol() OF 
     identSym:
@@ -232,9 +331,14 @@ BEGIN
                   END;
 
                 ReadNextSymbol();
-                Expr();
+                ParseExpression(exprTree, success, errMessage);
                 IF NOT success THEN exit;
-                {sem}Emit2(storeOpc, AddressOF(identName));{endsem}
+
+                {sem}
+                EmitCodeForExprTree(exprTree);
+                IF NOT success THEN exit;
+                Emit2(storeOpc, AddressOF(identName));
+                {endsem}
               END;
     readSym:
              BEGIN
@@ -278,10 +382,14 @@ BEGIN
                     Exit;
                   END;
                 ReadNextSymbol();
-                Expr();
+                ParseExpression(exprTree, success, errMessage);
                 IF NOT success THEN exit;
 
-                {sem}Emit1(writeOpc);{endsem}
+                {sem}
+                EmitCodeForExprTree(exprTree);
+                IF NOT success THEN exit;
+                Emit1(writeOpc);
+                {endsem}
 
                 IF GetCurrentSymbol() <> rightParSym THEN
                   BEGIN
@@ -290,121 +398,87 @@ BEGIN
                   END;
                 ReadNextSymbol();
               END;
-    ELSE
-      BEGIN
-        Exit;
-      END;
-  END;
-END;
-
-PROCEDURE Expr;
-BEGIN
-  Term();
-  IF NOT success THEN exit;
-
-  WHILE (GetCurrentSymbol() = plusSym) OR (GetCurrentSymbol() = minusSym) DO
-    BEGIN
-      CASE GetCurrentSymbol() OF 
-        plusSym:
-                 BEGIN
-                   ReadNextSymbol();
-                   Term();
-                   {sem}Emit1(addOpc);{endsem}
-                   IF NOT success THEN exit;
-                 END;
-        minusSym:
-                  BEGIN
-                    ReadNextSymbol();
-                    Term();
-                    {sem}Emit1(subOpc);{endsem}
-                    IF NOT success THEN exit;
-                  END;
-      END;
-    END;
-END;
-
-PROCEDURE Term;
-BEGIN
-  Fact();
-  IF NOT success THEN exit;
-
-  WHILE (GetCurrentSymbol() = multSym) OR (GetCurrentSymbol() = divSym) DO
-    BEGIN
-      CASE GetCurrentSymbol() OF 
-        multSym:
-                 BEGIN
-                   ReadNextSymbol();
-                   Fact();
-                   {sem}Emit1(mulOpc);{endsem}
-                   IF NOT success THEN exit;
-                 END;
-        divSym:
-                BEGIN
-                  ReadNextSymbol();
-                  Fact();
-                  {sem}Emit1(divOpc);{endsem}
-                  IF NOT success THEN exit;
-                END;
-      END;
-    END;
-END;
-
-PROCEDURE Fact;
-{local} VAR sign: integer; {endlocal}
-BEGIN
-  sign := 1;
-  CASE GetCurrentSymbol() OF 
-    minusSym:
+    beginSym:
               BEGIN
                 ReadNextSymbol();
-                sign := -1;
-              END;
-    plusSym:
-             BEGIN
-               ReadNextSymbol();
-             END;
-  END;
+                StatementSeq();
+                IF NOT success THEN exit;
 
-  CASE GetCurrentSymbol() OF 
-    numberSym:
-               BEGIN
-                 {sem}
-                 Emit2(loadConstOpc, GetCurrentNumberValue());
-                 Emit2(loadConstOpc, sign);
-                 Emit1(mulOpc);
-                {endsem}
-                 ReadNextSymbol();
-               END;
-    identSym:
-              BEGIN
-                {sem}
-                IF NOT IsDeclared(GetCurrentIdentName()) THEN
+                IF GetCurrentSymbol() <> endSym THEN
                   BEGIN
-                    SemErr('Variable not declared');
+                    success := FALSE;
                     Exit;
                   END;
-                Emit2(loadValOpc, AddressOF(GetCurrentIdentName()));
-                Emit2(loadConstOpc, sign);
-                Emit1(mulOpc);
-                {endsem}
                 ReadNextSymbol();
               END;
-    leftParSym:
-                BEGIN
-                  ReadNextSymbol();
-                  Expr();
-                  IF NOT success THEN exit;
+    ifSym:
+           BEGIN
+             ReadNextSymbol();
+             ParseExpression(exprTree, success, errMessage);
+             IF NOT success THEN exit;
 
-                  IF GetCurrentSymbol() <> rightParSym THEN
-                    BEGIN
-                      success := FALSE;
-                      Exit;
-                    END;
-                  ReadNextSymbol();
-                END;
+            {sem}
+             EmitCodeForExprTree(exprTree);
+             IF NOT success THEN exit;
+             Emit2(JmpZOpc, 0);
+             addr1 := CurAddr() - 2;
+            {endsem}
+
+             IF GetCurrentSymbol() <> thenSym THEN
+               BEGIN
+                 success := FALSE;
+                 Exit;
+               END;
+
+             ReadNextSymbol();
+             Statement();
+             IF NOT success THEN exit;
+
+             IF GetCurrentSymbol() = elseSym THEN
+               BEGIN
+                {sem}
+                 Emit2(JmpZOpc, 0);
+                 FixUp(addr1, CurAddr());
+                 addr1 := CurAddr() - 2;
+                {endsem}
+
+                 ReadNextSymbol();
+                 Statement();
+                 IF NOT success THEN exit;
+               END;
+
+            {sem}FixUp(addr1, CurAddr());{endsem}
+           END;
+    whileSym:
+              BEGIN
+                ReadNextSymbol();
+                {sem}addr1 := CurAddr();{endsem}
+                ParseExpression(exprTree, success, errMessage);
+                IF NOT success THEN exit;
+
+                {sem}
+                EmitCodeForExprTree(exprTree);
+                IF NOT success THEN exit;
+                Emit2(JmpZOpc, 0);
+                addr2 := CurAddr() - 2;
+                {endsem}
+
+                IF GetCurrentSymbol() <> doSym THEN
+                  BEGIN
+                    success := FALSE;
+                    Exit;
+                  END;
+
+                ReadNextSymbol();
+                Statement();
+
+                {sem}
+                Emit2(JmpOpc, addr1);
+                FixUp(addr2, CurAddr());
+                {endsem}
+              END;
     ELSE
       BEGIN
-        success := FALSE;
         Exit;
       END;
   END;

@@ -10,7 +10,8 @@ TYPE
             plusSym, minusSym, multSym, divSym,
             leftParSym, rightParSym,
             commaSym, semicolonSym, colonSym, assignSym, periodSym,
-            numberSym, identSym
+            numberSym, identSym,
+            ifSym, elseSym, thenSym, whileSym, doSym
            );
 
 PROCEDURE InitScanner(VAR inputFile: Text);
@@ -22,6 +23,8 @@ FUNCTION GetCurrentSymbol: Symbol;
 PROCEDURE GetCurrentSymbolPosition(VAR line, col: INTEGER);
 
 FUNCTION GetCurrentNumberValue: integer;
+
+FUNCTION GetCurrentNumberString: STRING;
 
 FUNCTION GetCurrentIdentName: STRING;
 
@@ -80,6 +83,16 @@ BEGIN
          GetKeyword := varSym
   ELSE IF s = 'program' THEN
          GetKeyword := programSym
+  ELSE IF s = 'if' THEN
+         GetKeyword := ifSym
+  ELSE IF s = 'then' THEN
+         GetKeyword := thenSym
+  ELSE IF s = 'while' THEN
+         GetKeyword := whileSym
+  ELSE IF s = 'do' THEN
+         GetKeyword := doSym
+  ELSE IF s = 'else' THEN
+         GetKeyword := elseSym
   ELSE
     GetKeyword := identSym;
 END;
@@ -199,6 +212,19 @@ BEGIN
       Halt(1);
     END;
   GetCurrentNumberValue := currentNumberValue;
+END;
+
+FUNCTION GetCurrentNumberString: STRING;
+VAR 
+  result: STRING;
+BEGIN
+  IF currentSymbol <> numberSym THEN
+    BEGIN
+      WriteLn('Error: Current symbol is not a number');
+      Halt(1);
+    END;
+  Str(currentNumberValue, result);
+  GetCurrentNumberString := result;
 END;
 
 FUNCTION GetCurrentIdentName: STRING;

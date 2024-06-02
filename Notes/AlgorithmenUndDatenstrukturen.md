@@ -433,4 +433,12 @@ Difficult Expr
 
 ### UE6
 
-Für die erste aufgabe wird MiniPascal aus de Übung kopiert und um die If und While Anweisungen erweitert. Die Lösungsidee davon ist in der Angabe schon ziemlich detailiert beschrieben, daher wird nicht mehr näher darauf eingegangen.
+Für die erste Aufgabe wird MiniPascal aus der Übung kopiert und um die If und While Anweisungen erweitert. Die Lösungsidee davon ist in der Angabe schon ziemlich detailiert beschrieben, daher wird nicht mehr näher darauf eingegangen.
+
+Das da in den bereitgestellten Units ein Interpreter vorhanden ist wird das Hauptprogram um 2 optionen erweitert "-c" um nur zu kompilieren und "-e" um nur einen gegebenen Maschinencode auszuführen. Wenn keine Option gewählt ist wird der Code kompiliert und gleich ausgeführt. Der Name des Maschinencodes wird nicht konfigurierbar sein um den Code einfacher zu halten.
+
+In CodeInt.pas ist ein kleiner Fehler, da beim Store nicht die mitgegebene Zahl sondern der Stack genutzt wird. Das hab ich in meiner Version ausgebessert.
+
+In der ATG der Angabe werden IF und WHILE nur durch Idents gesteuert, da aber Expressions zur Verfügung stehen werden diese verwendet. Dadurch muss man nicht ein Assign vor einem While machen, wenn eine Expression benötigt wird.
+
+Für die Optimierung wird erst der ExpressionParser aus Übung 5 angepasst und dann als Unit im Compiler verwendet, im Compiler selbst wird der ExpressionParser aufgerufen und dann der fertige, optimierte Baum in OpCodes zerlegt.
