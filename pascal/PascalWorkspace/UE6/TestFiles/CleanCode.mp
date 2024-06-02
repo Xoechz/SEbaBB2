@@ -1,0 +1,1 @@
+PROGRAM SVP;VAR a,b,c:INTEGER;BEGIN READ(a); READ(b); c:=(a*a)+(b*b);WRITE(c+0);END.

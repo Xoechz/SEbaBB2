@@ -430,3 +430,7 @@ Div/Null
 Easy Expr
 
 Difficult Expr
+
+### UE6
+
+Für die erste aufgabe wird MiniPascal aus de Übung kopiert und um die If und While Anweisungen erweitert. Die Lösungsidee davon ist in der Angabe schon ziemlich detailiert beschrieben, daher wird nicht mehr näher darauf eingegangen.
