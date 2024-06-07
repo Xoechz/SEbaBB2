@@ -6,7 +6,7 @@ INTERFACE
 USES
 CodeDef;
 
-PROCEDURE Parse(inFileName: STRING; VAR ok: boolean; VAR errorLine, errorCol: integer; VAR errorMessage: STRING; VAR code: CodeArray);
+PROCEDURE Parse(VAR inputFile: text; VAR ok: boolean; VAR errorLine, errorCol: integer; VAR errorMessage: STRING; VAR outputFile: FILE);
 
 IMPLEMENTATION
 
@@ -18,152 +18,137 @@ VAR
   errMessage: STRING;
 
 PROCEDURE SemErr(message: STRING);
-BEGIN
+BEGIN (* SemErr *)
   success := FALSE;
   errMessage := message;
-END;
+END; (* SemErr *)
 
 PROCEDURE EmitCodeForExprNode(t: TreePtr);
 VAR 
   n: integer;
   errorCode: WORD;
   errorCodeString: STRING;
-BEGIN
+BEGIN (* EmitCodeForExprNode *)
   IF (t <> NIL) THEN
-    BEGIN
+    BEGIN (* IF *)
       EmitCodeForExprNode(t^.left);
       EmitCodeForExprNode(t^.right);
 
       IF (Length(t^.val) = 0) THEN
-        BEGIN
+        BEGIN (* IF *)
           SemErr('Invalid Expression Node');
           exit;
-        END;
+        END; (* IF *)
 
       IF (t^.isNumber) THEN
-        BEGIN
+        BEGIN (* IF *)
           Val(t^.val, n, errorCode);
           IF (errorCode <> 0) THEN
-            BEGIN
+            BEGIN (* IF *)
               Str(errorCode, errorCodeString);
               SemErr(Concat('Invalid Number ', t^.val, ' (Error Code: ', errorCodeString, ')'));
               exit;
-            END;
+            END; (* IF *)
           Emit2(LoadConstOpc, n);
-        END
+        END (* IF *)
       ELSE
         IF (t^.val = '+') THEN
-          BEGIN
+          BEGIN (* ELSE IF *)
             Emit1(AddOpc)
-          END
+          END (* ELSE IF *)
       ELSE
         IF (t^.val = '-') THEN
-          BEGIN
+          BEGIN (* ELSE IF *)
             Emit1(SubOpc)
-          END
+          END (* ELSE IF *)
       ELSE
         IF (t^.val = '*') THEN
-          BEGIN
-            Emit1(MulOpc)
-          END
+          BEGIN (* ELSE IF *)
+            Emit1(MultOpc)
+          END (* ELSE IF *)
       ELSE
         IF (t^.val = '/') THEN
-          BEGIN
+          BEGIN (* ELSE IF *)
             Emit1(DivOpc)
-          END
+          END (* ELSE IF *)
       ELSE
-        BEGIN
+        BEGIN (* ELSE *)
           Emit2(LoadValOpc, AddressOF(t^.val));
-        END
-    END;
-END;
+        END (* ELSE *)
+    END; (* IF *)
+END; (* EmitCodeForExprNode *)
 
 PROCEDURE EmitCodeForExprTree(t: TreePtr);
 VAR 
   ok: boolean;
-BEGIN
+BEGIN (* EmitCodeForExprTree *)
+  WriteLn('Unoptimized Expression Tree:');
   PrintTreePostOrder(t);
   WriteLn();
   OptimizeTree(t, ok);
+  WriteLn('Optimized Expression Tree:');
   PrintTreePostOrder(t);
   WriteLn();
+  WriteLn();
 
-  IF NOT ok THEN
-    BEGIN
+  IF (NOT ok) THEN
+    BEGIN (* IF *)
       SemErr('Division by zero in expression.');
       DisposeTree(t);
       Exit;
-    END;
+    END; (* IF *)
 
   EmitCodeForExprNode(t);
   DisposeTree(t);
-END;
+END; (* EmitCodeForExprTree *)
 
-PROCEDURE MP(VAR code: CodeArray); Forward;
+PROCEDURE MP(VAR outputFile: FILE); Forward;
 PROCEDURE VarBlock; Forward;
 PROCEDURE Variable; Forward;
 PROCEDURE StatementSeq; Forward;
 PROCEDURE Statement; Forward;
 
-PROCEDURE Parse(inFileName: STRING; VAR ok: boolean; VAR errorLine, errorCol: integer; VAR errorMessage: STRING; VAR code: CodeArray);
-VAR 
-  inputFile: Text;
-  errCodeStr: STRING;
-BEGIN
+PROCEDURE Parse(VAR inputFile: text; VAR ok: boolean; VAR errorLine, errorCol: integer; VAR errorMessage: STRING; VAR outputFile: FILE);
+BEGIN (* Parse *)
   success := TRUE;
   errMessage := '';
 
-  Assign(inputFile, inFileName);
-  {$I-}
-  Reset(inputFile);
-  {$I+}
-  errorCode := IOResult;
-
-  IF (errorCode <> 0) THEN
-    BEGIN
-      str(errorCode, errCodeStr);
-      errorMessage := Concat('Error opening input file: ', inFileName, ' (error code: ', errCodeStr, ')');
-      ok := FALSE;
-      errorCol := 0;
-      errorLine := 0;
-      EXIT;
-    END;
-
   InitScanner(inputFile);
-  MP(code);
+  MP(outputFile);
+
   ok := success;
   GetCurrentSymbolPosition(errorLine, errorCol);
   errorMessage := errMessage;
-END;
+END; (* Parse *)
 
-PROCEDURE MP(VAR code: CodeArray);
-BEGIN
+PROCEDURE MP(VAR outputFile: FILE);
+BEGIN (* MP *)
   IF GetCurrentSymbol() <> programSym THEN
-    BEGIN
+    BEGIN (* IF *)
       success := false;
       exit;
-    END;
+    END; (* IF *)
 
   {sem}
   ResetSymbolTable();
-  InitCodeGenerator();
+  ResetCodeGenerator();
   {endsem}
 
   ReadNextSymbol();
 
   IF GetCurrentSymbol() <> identSym THEN
-    BEGIN
+    BEGIN (* IF *)
       success := false;
       exit;
-    END;
+    END; (* IF *)
 
   ReadNextSymbol();
 
   IF GetCurrentSymbol() <> semicolonSym THEN
-    BEGIN
+    BEGIN (* IF *)
       success := false;
       exit;
-    END;
+    END; (* IF *)
 
   ReadNextSymbol();
 
@@ -171,10 +156,10 @@ BEGIN
   IF NOT success THEN exit;
 
   IF GetCurrentSymbol() <> beginSym THEN
-    BEGIN
+    BEGIN (* IF *)
       success := false;
       exit;
-    END;
+    END; (* IF *)
 
   ReadNextSymbol();
 
@@ -182,33 +167,33 @@ BEGIN
   IF NOT success THEN exit;
 
   IF GetCurrentSymbol() <> endSym THEN
-    BEGIN
+    BEGIN (* IF *)
       success := false;
       exit;
-    END;
+    END; (* IF *)
 
   ReadNextSymbol();
 
   IF GetCurrentSymbol() <> periodSym THEN
-    BEGIN
+    BEGIN (* IF *)
       success := false;
       exit;
-    END;
+    END; (* IF *)
 
   ReadNextSymbol();
 
   {sem}
   Emit1(endOpc);
-  GetCode(code);
+  WriteCodeToFile(outputFile);
   {endsem}
-END;
+END; (* MP *)
 
 PROCEDURE VarBlock;
-BEGIN
+BEGIN (* VarBlock *)
   IF GetCurrentSymbol() <> varSym THEN
-    BEGIN
+    BEGIN (* IF *)
       exit;
-    END;
+    END; (* IF *)
 
   ReadNextSymbol();
 
@@ -216,92 +201,92 @@ BEGIN
   IF NOT success THEN exit;
 
   WHILE GetCurrentSymbol() = identSym DO
-    BEGIN
+    BEGIN (* WHILE *)
       ReadNextSymbol();
       Variable();
       IF NOT success THEN exit;
-    END;
-END;
+    END; (* WHILE *)
+END; (* VarBlock *)
 
 PROCEDURE Variable;
 VAR 
 {local} ok : boolean;{endlocal}
-BEGIN
+BEGIN (* Variable *)
   IF GetCurrentSymbol() <> identSym THEN
-    BEGIN
+    BEGIN (* IF *)
       success := false;
       exit;
-    END;
+    END; (* IF *)
 
   {sem}
   DeclareVar(GetCurrentIdentName(), ok);
   IF NOT ok THEN
-    BEGIN
+    BEGIN (* IF *)
       SemErr('Variable already declared');
       exit;
-    END;
+    END; (* IF *)
   {endsem}
 
   ReadNextSymbol();
 
   WHILE GetCurrentSymbol() = commaSym DO
-    BEGIN
+    BEGIN (* WHILE *)
       ReadNextSymbol();
       IF GetCurrentSymbol() <> identSym THEN
-        BEGIN
+        BEGIN (* IF *)
           success := false;
           exit;
-        END;
+        END; (* IF *)
 
       {sem}
       DeclareVar(GetCurrentIdentName(), ok);
       IF NOT ok THEN
-        BEGIN
+        BEGIN (* IF *)
           SemErr('Variable already declared');
           exit;
-        END;
+        END; (* IF *)
       {endsem}
 
       ReadNextSymbol();
-    END;
+    END; (* WHILE *)
 
   IF (GetCurrentSymbol() <> colonSym) THEN
-    BEGIN
+    BEGIN (* IF *)
       success := false;
       exit;
-    END;
+    END; (* IF *)
 
   ReadNextSymbol();
 
   IF (GetCurrentSymbol() <> integerSym) THEN
-    BEGIN
+    BEGIN (* IF *)
       success := false;
       exit;
-    END;
+    END; (* IF *)
 
   ReadNextSymbol();
 
   IF GetCurrentSymbol() <> semicolonSym THEN
-    BEGIN
+    BEGIN (* IF *)
       success := false;
       exit;
-    END;
+    END; (* IF *)
 
   ReadNextSymbol();
-END;
+END; (* Variable *)
 
 PROCEDURE StatementSeq;
-BEGIN
+BEGIN (* StatementSeq *)
   Statement();
   IF NOT success THEN exit;
 
   WHILE GetCurrentSymbol() = semicolonSym DO
-    BEGIN
+    BEGIN (* WHILE *)
       ReadNextSymbol();
       Statement();
       IF NOT success THEN exit;
-    END;
-END;
+    END; (* WHILE *)
+END; (* StatementSeq *)
 
 PROCEDURE Statement;
 {local}
@@ -310,25 +295,27 @@ VAR
   addr1, addr2: INTEGER;
   exprTree: TreePtr;
 {endlocal}
-BEGIN
+BEGIN (* Statement *)
   CASE GetCurrentSymbol() OF 
     identSym:
-              BEGIN
+              BEGIN (* identSym *)
                 {sem}
                 identName := GetCurrentIdentName();
+
                 IF NOT IsDeclared(identName) THEN
-                  BEGIN
+                  BEGIN (* IF *)
                     SemErr('Variable not declared');
                     Exit;
-                  END;
+                  END; (* IF *)
                 {endsem}
 
                 ReadNextSymbol();
+
                 IF GetCurrentSymbol() <> assignSym THEN
-                  BEGIN
+                  BEGIN (* IF *)
                     success := FALSE;
                     Exit;
-                  END;
+                  END; (* IF *)
 
                 ReadNextSymbol();
                 ParseExpression(exprTree, success, errMessage);
@@ -339,48 +326,57 @@ BEGIN
                 IF NOT success THEN exit;
                 Emit2(storeOpc, AddressOF(identName));
                 {endsem}
-              END;
+              END; (* identSym *)
     readSym:
-             BEGIN
+             BEGIN (* readSym *)
                ReadNextSymbol();
+
                IF GetCurrentSymbol() <> leftParSym THEN
-                 BEGIN
+                 BEGIN (* IF *)
                    success := FALSE;
                    Exit;
-                 END;
+                 END; (* IF *)
+
                ReadNextSymbol();
+
                IF GetCurrentSymbol() <> identSym THEN
-                 BEGIN
+                 BEGIN (* IF *)
                    success := FALSE;
                    Exit;
-                 END;
+                 END; (* IF *)
 
               {sem}
                identName := GetCurrentIdentName();
+
                IF NOT IsDeclared(identName) THEN
-                 BEGIN
+                 BEGIN (* IF *)
                    SemErr('Variable not declared');
                    Exit;
-                 END;
+                 END; (* IF *)
+
                Emit2(readOpc, AddressOF(identName));
               {endsem}
 
                ReadNextSymbol();
+
                IF GetCurrentSymbol() <> rightParSym THEN
-                 BEGIN
+                 BEGIN (* IF *)
                    success := FALSE;
                    Exit;
-                 END;
+                 END; (* IF *)
+
                ReadNextSymbol();
-             END;
+             END; (* readSym *)
     writeSym:
-              BEGIN
+              BEGIN (* writeSym *)
                 ReadNextSymbol();
+
                 IF GetCurrentSymbol() <> leftParSym THEN
-                  BEGIN
+                  BEGIN (* IF *)
                     success := FALSE;
                     Exit;
-                  END;
+                  END; (* IF *)
+
                 ReadNextSymbol();
                 ParseExpression(exprTree, success, errMessage);
                 IF NOT success THEN exit;
@@ -392,27 +388,29 @@ BEGIN
                 {endsem}
 
                 IF GetCurrentSymbol() <> rightParSym THEN
-                  BEGIN
+                  BEGIN (* IF *)
                     success := FALSE;
                     Exit;
-                  END;
+                  END; (* IF *)
+
                 ReadNextSymbol();
-              END;
+              END; (* writeSym *)
     beginSym:
-              BEGIN
+              BEGIN (* beginSym *)
                 ReadNextSymbol();
                 StatementSeq();
                 IF NOT success THEN exit;
 
                 IF GetCurrentSymbol() <> endSym THEN
-                  BEGIN
+                  BEGIN (* IF *)
                     success := FALSE;
                     Exit;
-                  END;
+                  END; (* IF *)
+
                 ReadNextSymbol();
-              END;
+              END; (* beginSym *)
     ifSym:
-           BEGIN
+           BEGIN (* ifSym *)
              ReadNextSymbol();
              ParseExpression(exprTree, success, errMessage);
              IF NOT success THEN exit;
@@ -420,68 +418,68 @@ BEGIN
             {sem}
              EmitCodeForExprTree(exprTree);
              IF NOT success THEN exit;
-             Emit2(JmpZOpc, 0);
-             addr1 := CurAddr() - 2;
+             Emit2(JumpZeroOpc, 0);
+             addr1 := CurrentAddress() - 2;
             {endsem}
 
              IF GetCurrentSymbol() <> thenSym THEN
-               BEGIN
+               BEGIN (* IF *)
                  success := FALSE;
                  Exit;
-               END;
+               END; (* IF *)
 
              ReadNextSymbol();
              Statement();
              IF NOT success THEN exit;
 
              IF GetCurrentSymbol() = elseSym THEN
-               BEGIN
+               BEGIN (* IF *)
                 {sem}
-                 Emit2(JmpZOpc, 0);
-                 FixUp(addr1, CurAddr());
-                 addr1 := CurAddr() - 2;
+                 Emit2(JumpZeroOpc, 0);
+                 FixUpJumpTarget(addr1, CurrentAddress());
+                 addr1 := CurrentAddress() - 2;
                 {endsem}
 
                  ReadNextSymbol();
                  Statement();
                  IF NOT success THEN exit;
-               END;
+               END; (* IF *)
 
-            {sem}FixUp(addr1, CurAddr());{endsem}
-           END;
+            {sem}FixUpJumpTarget(addr1, CurrentAddress());{endsem}
+           END; (* ifSym *)
     whileSym:
-              BEGIN
+              BEGIN (* whileSym *)
                 ReadNextSymbol();
-                {sem}addr1 := CurAddr();{endsem}
+                {sem}addr1 := CurrentAddress();{endsem}
                 ParseExpression(exprTree, success, errMessage);
                 IF NOT success THEN exit;
 
                 {sem}
                 EmitCodeForExprTree(exprTree);
                 IF NOT success THEN exit;
-                Emit2(JmpZOpc, 0);
-                addr2 := CurAddr() - 2;
+                Emit2(JumpZeroOpc, 0);
+                addr2 := CurrentAddress() - 2;
                 {endsem}
 
                 IF GetCurrentSymbol() <> doSym THEN
-                  BEGIN
+                  BEGIN (* IF *)
                     success := FALSE;
                     Exit;
-                  END;
+                  END; (* IF *)
 
                 ReadNextSymbol();
                 Statement();
 
                 {sem}
-                Emit2(JmpOpc, addr1);
-                FixUp(addr2, CurAddr());
+                Emit2(JumpOpc, addr1);
+                FixUpJumpTarget(addr2, CurrentAddress());
                 {endsem}
-              END;
+              END; (* whileSym *)
     ELSE
-      BEGIN
+      BEGIN (* ELSE *)
         Exit;
-      END;
-  END;
-END;
+      END; (* ELSE *)
+  END; (* CASE *)
+END; (* Statement *)
 
 END.

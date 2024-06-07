@@ -1,111 +1,87 @@
 PROGRAM MPC;
 
 USES
-MpParser, CodeInt, CodeDef;
+MpParser, CodeDef;
 
 PROCEDURE ShowHelp;
 BEGIN (* ShowHelp *)
-  WriteLn('Usage: MPC [OPTION] inFile');
-  WriteLn('   inFile: input file.');
-  WriteLn('   -c compile only. Does not execute the compiled file. Cannot be used with -e.');
-  WriteLn('   -e execute only. Needs a compiled file as input. Cannot be used with -c.');
+  WriteLn('Usage: MPC inputFile [outputFile]');
+  WriteLn('   inputFile: the file to be compiled.');
+  WriteLn('   outputFile: the file where the compiled code will be stored. Default inputFile + ''c''.');
   WriteLn('   --help: display this help and exit.');
 END; (* ShowHelp *)
 
-PROCEDURE GetParameters(VAR execute, compile: BOOLEAN; VAR inFileName: STRING);
-BEGIN (* GetParameters *)
+PROCEDURE ProcessParameters(VAR inputFile: TEXT; VAR outputFile: FILE);
+VAR 
+  inputFileName, outputFileName: string;
+BEGIN (* ProcessParameters *)
   IF (ParamCount < 1) OR (ParamCount > 2) OR (ParamStr(1) = '--help') THEN
     BEGIN (* IF *)
       ShowHelp();
       HALT(1);
     END; (* IF *)
 
+  inputFileName := ParamStr(1);
+
   IF (ParamCount = 1) THEN
-    BEGIN
-      execute := TRUE;
-      compile := TRUE;
-      inFileName := ParamStr(1);
-    END
+    BEGIN (* IF *)
+      outputFileName := inputFileName + 'c';
+    END (* IF *)
   ELSE
-    IF (ParamStr(1) = '-c') THEN
-      BEGIN
-        IF (ParamStr(2) = '-e') THEN
-          BEGIN
-            WriteLn('Error: -c and -e cannot be used together.');
-            HALT(1);
-          END;
+    BEGIN (* ELSE *)
+      outputFileName := ParamStr(2);
+    END; (* ELSE *)
 
-        execute := FALSE;
-        compile := TRUE;
-        inFileName := ParamStr(2);
-      END
-  ELSE
-    IF (ParamStr(1) = '-e') THEN
-      BEGIN
-        IF (ParamStr(2) = '-c') THEN
-          BEGIN
-            WriteLn('Error: -e and -c cannot be used together.');
-            HALT(1);
-          END;
+  Assign(inputFile, inputFileName);
+  {$I-}
+  Reset(inputFile);
+  {$I+}
+  errorCode := IOResult;
 
-        execute := TRUE;
-        compile := FALSE;
-        inFileName := ParamStr(2);
-      END
-  ELSE
-    BEGIN
-      ShowHelp();
+  IF (errorCode <> 0) THEN
+    BEGIN (* IF *)
+      WriteLn('Error opening file ', inputFileName, '. Error code: ', errorCode);
       HALT(1);
-    END;
-END; (* GetParameters *)
+    END; (* IF *)
+
+  Assign(outputFile, outputFileName);
+  {$I-}
+  Rewrite(outputFile);
+  {$I+}
+  errorCode := IOResult;
+
+  IF (errorCode <> 0) THEN
+    BEGIN (* IF *)
+      WriteLn('Error opening file ', outputFileName, '. Error code: ', errorCode);
+      Close(inputFile);
+      HALT(1);
+    END; (* IF *)
+END; (* ProcessParameters *)
 
 VAR 
-  ok, execute, compile: boolean;
+  ok: boolean;
   errorCol, errorLine: integer;
-  errMessage, outFileName, inFileName: string;
-  code: CodeArray;
-BEGIN
-  GetParameters(execute, compile, inFileName);
+  errMessage: string;
+  inputFile: TEXT;
+  outputFile: FILE;
+BEGIN (* MPC *)
+  ProcessParameters(inputFile, outputFile);
 
-  outFileName := inFileName + 'c';
+  Parse(inputFile, ok, errorLine, errorCol, errMessage, outputFile);
+  Close(inputFile);
+  Close(outputFile);
 
-  IF (compile) THEN
-    BEGIN
-      Parse(inFileName, ok, errorLine, errorCol, errMessage, code);
-
-      IF ok THEN
-        BEGIN
-          StoreCode(outFileName, code);
-          WriteLn('Compilation completed.')
-        END
-      ELSE
-        IF (errMessage <> '') THEN
-          BEGIN
-            WriteLn('Error: ', errMessage, ' at line ', errorLine, ' column ', errorCol);
-            execute := FALSE;
-          END
-      ELSE
-        BEGIN
-          WriteLn('Syntax error at line ', errorLine, ' column ', errorCol);
-          execute := FALSE;
-        END;
-    END;
-
-  IF (execute) THEN
-    BEGIN
-      IF (NOT compile) THEN
-        BEGIN
-          LoadCode(inFileName, code, ok);
-        END;
-
-      IF (ok) THEN
-        BEGIN
-          InterpretCode(code);
-        END
-      ELSE
-        BEGIN
-          WriteLn('Error loading compiled file.');
-          HALT(1);
-        END;
-    END;
-END.
+  IF (ok) THEN
+    BEGIN (* IF *)
+      WriteLn('Compilation completed.')
+    END (* IF *)
+  ELSE
+    IF (errMessage <> '') THEN
+      BEGIN (* ELSE IF *)
+        WriteLn('Semantic Error: ', errMessage, ' at line ', errorLine, ' column ', errorCol);
+      END (* ELSE IF *)
+  ELSE
+    BEGIN (* ELSE *)
+      WriteLn('Syntax error at line ', errorLine, ' column ', errorCol);
+    END; (* ELSE *)
+END. (* MPC *)

@@ -155,13 +155,13 @@ BEGIN (* Fact *)
                  ReadNextSymbol();
                END; (* numberSym *)
     identSym:
-              BEGIN
+              BEGIN (* identSym *)
                 {sem}
                 IF NOT IsDeclared(GetCurrentIdentName()) THEN
-                  BEGIN
+                  BEGIN (* IF *)
                     SemErr('Variable not declared');
                     Exit;
-                  END;
+                  END; (* IF *)
 
                 f := new(NodePtr);
 
@@ -178,7 +178,7 @@ BEGIN (* Fact *)
                 {endsem}
 
                 ReadNextSymbol();
-              END;
+              END; (* identSym *)
     leftParSym:
                 BEGIN (* leftParSym *)
                   ReadNextSymbol();

@@ -44,31 +44,31 @@ VAR
   inFile: Text;
 
 PROCEDURE ReadNextChar;
-BEGIN
+BEGIN (* ReadNextChar *)
   Read(inFile, currentChar);
 
   IF (currentChar = LF) THEN
-    BEGIN
+    BEGIN (* IF *)
       currentLine := currentLine + 1;
       currentCol := 0;
-    END
+    END (* IF *)
   ELSE
-    BEGIN
+    BEGIN (* ELSE *)
       currentCol := currentCol + 1;
-    END;
-END;
+    END; (* ELSE *)
+END; (* ReadNextChar *)
 
 PROCEDURE InitScanner(VAR inputFile: Text);
-BEGIN
+BEGIN (* InitScanner *)
   inFile := inputFile;
   currentLine := 1;
   currentCol := 0;
   ReadNextChar();
   ReadNextSymbol();
-END;
+END; (* InitScanner *)
 
 FUNCTION GetKeyword(s: STRING): Symbol;
-BEGIN
+BEGIN (* GetKeyword *)
   IF s = 'begin' THEN
     GetKeyword := beginSym
   ELSE IF s = 'end' THEN
@@ -95,146 +95,152 @@ BEGIN
          GetKeyword := elseSym
   ELSE
     GetKeyword := identSym;
-END;
+END; (* GetKeyword *)
 
 PROCEDURE ReadNextSymbol;
-BEGIN
+BEGIN (* ReadNextSymbol *)
   WHILE (currentChar = Space) OR (currentChar = LF) OR (currentChar = CR) OR (currentChar = Tab) DO
-    BEGIN
+    BEGIN (* WHILE *)
       ReadNextChar();
-    END;
+    END; (* WHILE *)
 
   symbolLine := currentLine;
   symbolCol := currentCol;
 
   CASE currentChar OF 
     '+':
-         BEGIN
+         BEGIN (* + *)
            currentSymbol := plusSym;
            ReadNextChar();
-         END;
+         END; (* + *)
     '-':
-         BEGIN
+         BEGIN (* - *)
            currentSymbol := minusSym;
            ReadNextChar();
-         END;
+         END; (* - *)
     '*':
-         BEGIN
+         BEGIN (* * *)
            currentSymbol := multSym;
            ReadNextChar();
-         END;
+         END; (* * *)
     '/':
-         BEGIN
+         BEGIN (* / *)
            currentSymbol := divSym;
            ReadNextChar();
-         END;
+         END; (* / *)
     '(':
-         BEGIN
+         BEGIN (* ( *)
            currentSymbol := leftParSym;
            ReadNextChar();
-         END;
+         END; (* ( *)
     ')':
-         BEGIN
+         BEGIN (* ) *)
            currentSymbol := rightParSym;
            ReadNextChar();
-         END;
+         END; (* ) *)
     ',':
-         BEGIN
+         BEGIN (* , *)
            currentSymbol := commaSym;
            ReadNextChar();
-         END;
+         END; (* , *)
     ':':
-         BEGIN
+         BEGIN (* : *)
            ReadNextChar();
            IF currentChar = '=' THEN
-             BEGIN
+             BEGIN (* IF *)
                currentSymbol := assignSym;
                ReadNextChar();
-             END
+             END (* IF *)
            ELSE
-             BEGIN
+             BEGIN (* ELSE *)
                currentSymbol := colonSym;
-             END;
-         END;
+             END; (* ELSE *)
+         END; (* : *)
     ';':
-         BEGIN
+         BEGIN (* ; *)
            currentSymbol := semicolonSym;
            ReadNextChar();
-         END;
+         END; (* ; *)
     '.':
-         BEGIN
+         BEGIN (* . *)
            currentSymbol := periodSym;
            ReadNextChar();
-         END;
+         END; (* . *)
     '0'..'9':
-              BEGIN
+              BEGIN (* 0..9 *)
                 currentSymbol := numberSym;
                 currentNumberValue := 0;
+
                 WHILE currentChar IN ['0' .. '9'] DO
-                  BEGIN
+                  BEGIN (* WHILE *)
                     currentNumberValue := currentNumberValue * 10 + Ord(currentChar) - Ord('0');
                     ReadNextChar();
-                  END;
-              END;
+                  END; (* WHILE *)
+              END; (* 0..9 *)
     'a'..'z', 'A'..'Z', '_':
-                             BEGIN
+                             BEGIN (* a..z, A..Z, _ *)
                                CurrentIdentName := '';
+
                                WHILE currentChar IN ['a' .. 'z', 'A' .. 'Z', '0' .. '9', '_'] DO
-                                 BEGIN
+                                 BEGIN (* WHILE *)
                                    CurrentIdentName := CurrentIdentName + LowerCase(currentChar);
                                    ReadNextChar();
-                                 END;
+                                 END; (* WHILE *)
+
                                currentSymbol := GetKeyword(CurrentIdentName);
-                             END;
+                             END; (* a..z, A..Z, _ *)
     ELSE
-      BEGIN
+      BEGIN (* ELSE *)
         currentSymbol := noSym;
-      END;
-  END;
-END;
+      END; (* ELSE *)
+  END; (* CASE *)
+END; (* ReadNextSymbol *)
 
 FUNCTION GetCurrentSymbol: Symbol;
-BEGIN
+BEGIN (* GetCurrentSymbol *)
   GetCurrentSymbol := currentSymbol;
-END;
+END; (* GetCurrentSymbol *)
 
 PROCEDURE GetCurrentSymbolPosition(VAR line, col: INTEGER);
-BEGIN
+BEGIN (* GetCurrentSymbolPosition *)
   line := symbolLine;
   col := symbolCol;
-END;
+END; (* GetCurrentSymbolPosition *)
 
 FUNCTION GetCurrentNumberValue: integer;
-BEGIN
-  IF currentSymbol <> numberSym THEN
-    BEGIN
+BEGIN (* GetCurrentNumberValue *)
+  IF (currentSymbol <> numberSym) THEN
+    BEGIN (* IF *)
       WriteLn('Error: Current symbol is not a number');
       Halt(1);
-    END;
+    END; (* IF *)
+
   GetCurrentNumberValue := currentNumberValue;
-END;
+END; (* GetCurrentNumberValue *)
 
 FUNCTION GetCurrentNumberString: STRING;
 VAR 
   result: STRING;
-BEGIN
-  IF currentSymbol <> numberSym THEN
-    BEGIN
+BEGIN (* GetCurrentNumberString *)
+  IF (currentSymbol <> numberSym) THEN
+    BEGIN (* IF *)
       WriteLn('Error: Current symbol is not a number');
       Halt(1);
-    END;
+    END; (* IF *)
+
   Str(currentNumberValue, result);
   GetCurrentNumberString := result;
-END;
+END; (* GetCurrentNumberString *)
 
 FUNCTION GetCurrentIdentName: STRING;
-BEGIN
+BEGIN (* GetCurrentIdentName *)
   IF currentSymbol <> identSym THEN
-    BEGIN
+    BEGIN (* IF *)
       WriteLn('Error: Current symbol is not an identifier');
       Halt(1);
-    END;
+    END; (* IF *)
+
   GetCurrentIdentName := CurrentIdentName;
-END;
+END; (* GetCurrentIdentName *)
 
 END.
