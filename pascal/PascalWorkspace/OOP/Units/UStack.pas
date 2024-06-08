@@ -1,61 +1,48 @@
-Unit UStack;
+
+UNIT UStack;
 
 INTERFACE
 
-const
-  Size = 10;
+USES
+UList;
 
-type
-  Stack = Object
-    PROCEDURE InitStack;
-    PROCEDURE DisposeStack;
-    PROCEDURE Push(val: integer; var ok: boolean);
-    PROCEDURE Pop(var val: integer; var ok: boolean);
+TYPE 
+  Stack = OBJECT
+    PROCEDURE Init;
+    PROCEDURE Done;
+    PROCEDURE Push(val: integer; VAR ok: boolean);
+    PROCEDURE Pop(VAR val: integer; VAR ok: boolean);
     FUNCTION IsEmpty: boolean;
 
-    PRIVATE
-    data: array[1..Size] of integer;
-    top: 0..Size;
-  end;
+    PRIVATE 
+      elements: List;
+  END;
 
 IMPLEMENTATION
 
-PROCEDURE Stack.InitStack;
-begin
-  top := 0;
-end;
+PROCEDURE Stack.Init;
+BEGIN
+  elements.Init();
+END;
 
-PROCEDURE Stack.DisposeStack;
-begin
-end;
+PROCEDURE Stack.Done;
+BEGIN
+  elements.Done();
+END;
 
-PROCEDURE Stack.Push(val: integer; var ok: boolean);
-begin
-  if top = size then
-    ok := false
-  else
-  begin
-    ok := true;
-    top := top + 1;
-    data[top] := val;
-  end;
-end;
+PROCEDURE Stack.Push(val: integer; VAR ok: boolean);
+BEGIN
+  elements.Prepend(val, ok);
+END;
 
-PROCEDURE Stack.Pop(var val: integer; var ok: boolean);
-begin
-  if top = 0 then
-    ok := false
-  else
-  begin
-    ok := true;
-    val := data[top];
-    top := top - 1;
-  end;
-end;
+PROCEDURE Stack.Pop(VAR val: integer; VAR ok: boolean);
+BEGIN
+  elements.RemoveFirst(val, ok);
+END;
 
 FUNCTION Stack.IsEmpty: boolean;
-begin
-  IsEmpty := top = 0;
-end;
+BEGIN
+  IsEmpty := elements.IsEmpty();
+END;
 
-end.
+END.

@@ -1,14 +1,14 @@
 PROGRAM TestStack;
 
 USES
-UStack;
+UStack, heaptrc;
 VAR 
   s: Stack;
   i, j: integer;
   ok: boolean;
 BEGIN
   j := 0;
-  s.InitStack();
+  s.Init();
 
   writeln('Stack is empty: ', s.IsEmpty());
 
@@ -26,5 +26,5 @@ BEGIN
       writeln('j = ', j, ' ok = ', ok);
     END;
 
-  s.DisposeStack();
+  s.Done();
 END.
