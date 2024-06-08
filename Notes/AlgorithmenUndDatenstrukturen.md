@@ -442,3 +442,5 @@ In der ATG der Angabe werden IF und WHILE nur durch Idents gesteuert, da aber Ex
 Für die Optimierung wird erst der ExpressionParser aus Übung 5 angepasst und dann als Unit im Compiler verwendet, im Compiler selbst wird der ExpressionParser aufgerufen und dann der fertige, optimierte Baum in OpCodes zerlegt.
 
 Der unoptimierte und der optimierte Baum wird beim kompilieren ausgegeben um die Funktionalität zu zeigen.
+
+Die Tests werden wieder über ein Shellskript ausgeführt.

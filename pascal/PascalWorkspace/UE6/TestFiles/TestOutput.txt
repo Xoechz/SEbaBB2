@@ -45,6 +45,21 @@ Compilation completed.
 Execution:
 5
 
+Oneliner Test:
+Unoptimized Expression Tree:
+a a * b b * + 
+Optimized Expression Tree:
+a a * b b * + 
+
+Unoptimized Expression Tree:
+c 0 + 
+Optimized Expression Tree:
+c 
+
+Compilation completed.
+Execution:
+5
+
 Factorial Test:
 Unoptimized Expression Tree:
 n 

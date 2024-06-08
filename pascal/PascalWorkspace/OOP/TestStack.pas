@@ -1,24 +1,30 @@
 PROGRAM TestStack;
-Uses UStack;
-var 
+
+USES
+UStack;
+VAR 
   s: Stack;
   i, j: integer;
   ok: boolean;
-begin
+BEGIN
   j := 0;
   s.InitStack();
 
-  for i := 1 to 11 do
-  begin
-    s.Push(i, ok);
-    writeln('i = ', i, ' ok = ', ok);
-  end;
+  writeln('Stack is empty: ', s.IsEmpty());
 
-  for i := 1 to 11 do
-  begin
-    s.Pop(j, ok);
-    writeln('j = ', j, ' ok = ', ok);
-  end;
+  FOR i := 1 TO 11 DO
+    BEGIN
+      s.Push(i, ok);
+      writeln('i = ', i, ' ok = ', ok);
+    END;
+
+  writeln('Stack is empty: ', s.IsEmpty());
+
+  FOR i := 1 TO 11 DO
+    BEGIN
+      s.Pop(j, ok);
+      writeln('j = ', j, ' ok = ', ok);
+    END;
 
   s.DisposeStack();
-end.
+END.

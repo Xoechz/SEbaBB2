@@ -26,6 +26,12 @@ echo "Execution:"
 MPVM OutputFile.mpc < OneTwo
 echo
 
+echo "Oneliner Test:"
+../bin/MPC Oneliner.mp
+echo "Execution:"
+MPVM Oneliner.mpc < OneTwo
+echo
+
 echo "Factorial Test:"
 ../bin/MPC Factorial.mp
 echo "Execution:"
@@ -36,4 +42,3 @@ echo "Expression Test:"
 ../bin/MPC Expressions.mp
 echo "Execution:"
 MPVM Expressions.mpc < OneTwo
-echo
