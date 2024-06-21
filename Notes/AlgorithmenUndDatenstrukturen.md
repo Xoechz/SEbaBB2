@@ -444,3 +444,19 @@ Für die Optimierung wird erst der ExpressionParser aus Übung 5 angepasst und d
 Der unoptimierte und der optimierte Baum wird beim kompilieren ausgegeben um die Funktionalität zu zeigen.
 
 Die Tests werden wieder über ein Shellskript ausgeführt.
+
+### UE7
+
+Die größe des Vektors wird statisch definiert, daher speichert der Vektor die Daten in einem einfachem Array.
+
+RemoveElementAt wird zusätzlich hinzugefügt, um die Queue und den Stack zu ermöglichen. Hier müssen auch die Positionen der anderen Elemente angepasst werden.
+
+Die Tests wurden wieder wie Unittests aufgebaut.
+
+Der Stack und die Queue sind Klassen die, mittels Komposition, den Vektor als Datenkomponente nutzen. Dadurch ist die Implementierung sehr einfach, da die Prozeduren eine einfache überprüfung und dann ein Vektor Aufruf sind.
+
+Die Funktion isPrime wurde für den PrimeVector implementiert. Da sich die Multiplikationspaare ab der Wurzel einer Zahl wiederholen, muss man nur den Bereich von 2 bis zur Wurzel auf Teiler überprüfen.
+
+Die Tests für NaturalVector and PrimeVector werden bei den Vector Tests eingebaut. Die Tests werden mit einem VectorPointer ausgeführt um zu zeigen, dass NaturalVector und PrimeVector mithilfe von Polymorphismus Vectoren sind.
+
+Die Vector Tests nutzen nur positive Primzahlen, um zu zeigen, dass in diesem Fall die Vectoren gleich sind.
