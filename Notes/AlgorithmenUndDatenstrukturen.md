@@ -287,6 +287,41 @@ Befehlssatz der VM mit Stack, Storage, Program und Console
 
 Heit gibts ka Mitschrift weis mi net zaht hot lol.
 
+## 22.6.2024
+
+Same do, abstract classes
+
+strong and weak aggregation
+
+## 29.6.2024
+
+### OOP - Framework
+
+Common Code auslagern, Beispiel:
+
+Collections
+  Listen, Bäume, Vectors
+  Add, Remove, Print
+  Iterator
+
+Implementierung von Frameworkcode
+
+Man braucht für eine generische Collection Wrapper um Integer, String, etc. als Object zu speichern.
+
+![Collections](Pictures/ADF4.jpg)
+
+GetType wird nocht überall hinzugefügt.
+
+Iterator sind eigene Objekte die über die Collection iterieren.
+
+Collections brauchen eine CreateIterator Methode. Diese gibt einen Generischen Iterator zurück.
+
+Der Iterator hat die Methoden, GetCurrent, HasValue, Next, MoveToNext und Init/Done.
+
+ToString wird auch überall hinugefügt.
+
+MiniLib only works on Windows :(
+
 ## Übungen
 
 ### UE1
