@@ -7,7 +7,7 @@
       "request": "launch",
       "command": "cd ${fileDirname}/bin && ./${fileBasenameNoExtension}",
       "windows": {
-        "command": "cd ${fileDirname}\\bin && ${fileBasenameNoExtension}.exe"
+        "command": ".\\${fileBasenameNoExtension}.exe"
       },
       "terminalName": "EPE - Pascal Output",
       "terminalIndex": -1,

@@ -495,3 +495,9 @@ Die Funktion isPrime wurde für den PrimeVector implementiert. Da sich die Multi
 Die Tests für NaturalVector and PrimeVector werden bei den Vector Tests eingebaut. Die Tests werden mit einem VectorPointer ausgeführt um zu zeigen, dass NaturalVector und PrimeVector mithilfe von Polymorphismus Vectoren sind.
 
 Die Vector Tests nutzen nur positive Primzahlen, um zu zeigen, dass in diesem Fall die Vectoren gleich sind.
+
+### UE8
+
+Die Angabe beschreibt bereits ziemlich genau den Ablauf der Implementierung. Die Tests werden wieder wie Unittests umgesetzt.
+
+1 stunde + 1 stunde testen wahrscheinlich
