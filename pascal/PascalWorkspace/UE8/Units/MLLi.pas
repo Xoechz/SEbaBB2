@@ -1,3 +1,4 @@
+
 UNIT MLLi;
 
 INTERFACE
@@ -8,12 +9,12 @@ MLObj, MLColl;
 TYPE 
 
   MLObjectNodePtr = ^MLObjectNode;
-  MLObjectNode = Record
+  MLObjectNode = RECORD
     obj: MLObject;
     next: MLObjectNodePtr;
   END;
 
-  MLListIterator = ^MLListIteratorObj; 
+  MLListIterator = ^MLListIteratorObj;
 
   MLList = ^MLListObj;
   MLListObj = OBJECT(MLCollectionObj)
@@ -34,12 +35,12 @@ TYPE
 
     FUNCTION NewIterator: MLIterator; VIRTUAL;
 
-   PROCEDURE Prepend(o: MLObject); VIRTUAL;
+    PROCEDURE Prepend(o: MLObject); VIRTUAL;
 
     PRIVATE 
 
-head: MLObjectNodePtr;
-curSize: INTEGER;
+      head: MLObjectNodePtr;
+      curSize: INTEGER;
 
   END;
 
@@ -55,9 +56,9 @@ curSize: INTEGER;
 
     PRIVATE 
 
-    cur: MLObjectNodePtr;
+      cur: MLObjectNodePtr;
 
-    l: MLList;
+      l: MLList;
 
   END;
 
@@ -97,35 +98,35 @@ BEGIN (* MLListObj.Size *)
 END; (* MLListObj.Size *)
 
 PROCEDURE MLListObj.Add(o: MLObject);
-var 
+VAR 
   temp, prev: MLObjectNodePtr;
 BEGIN (* MLListObj.Add *)
   curSize := curSize + 1;
   temp := head;
   prev := NIL;
 
-  while temp <> NIL do
-  BEGIN (* WHILE *)
-    prev := temp;
-    temp := temp^.next;
-  END; (* WHILE *)
+  WHILE temp <> NIL DO
+    BEGIN (* WHILE *)
+      prev := temp;
+      temp := temp^.next;
+    END; (* WHILE *)
 
   New(temp);
   temp^.obj := o;
   temp^.next := NIL;
 
-  if prev = NIL then
-  BEGIN (* IF *)
-    head := temp
-  end (* IF *)
-  else
-  BEGIN (* ELSE *)
-    prev^.next := temp;
-END; (* ELSE *)
+  IF prev = NIL THEN
+    BEGIN (* IF *)
+      head := temp
+    END (* IF *)
+  ELSE
+    BEGIN (* ELSE *)
+      prev^.next := temp;
+    END; (* ELSE *)
 END; (* MLListObj.Add *)
 
 FUNCTION MLListObj.Remove(o: MLObject): MLObject;
-var
+VAR 
   temp, prev: MLObjectNodePtr;
   found: BOOLEAN;
 BEGIN (* MLListObj.Remove *)
@@ -133,62 +134,62 @@ BEGIN (* MLListObj.Remove *)
   prev := NIL;
   found := FALSE;
 
-  while ((temp <> NIL) and (not found)) do
-  BEGIN (* WHILE *)
-    if temp^.obj^.IsEqualTo(o) then
+  WHILE ((temp <> NIL) AND (NOT found)) DO
+    BEGIN (* WHILE *)
+      IF temp^.obj^.IsEqualTo(o) THEN
+        BEGIN (* IF *)
+          found := TRUE;
+        END (* IF *)
+      ELSE
+        BEGIN (* ELSE *)
+          prev := temp;
+          temp := temp^.next;
+        END; (* ELSE *)
+    END; (* WHILE *)
+
+  IF found THEN
     BEGIN (* IF *)
-      found := TRUE;
-    end (* IF *)
-    else
+      curSize := curSize - 1;
+
+      IF prev = NIL THEN
+        BEGIN (* IF *)
+          head := temp^.next;
+        END (* IF *)
+      ELSE
+        BEGIN (* ELSE *)
+          prev^.next := temp^.next;
+        END; (* ELSE *)
+
+      Remove := temp^.obj;
+      Dispose(temp);
+    END (* IF *)
+  ELSE
     BEGIN (* ELSE *)
-      prev := temp;
-      temp := temp^.next;
+      Remove := NIL;
     END; (* ELSE *)
-  END; (* WHILE *)
-
-  if found then
-  BEGIN (* IF *)
-    curSize := curSize - 1;
-
-    if prev = NIL then
-    BEGIN (* IF *)
-      head := temp^.next;
-    end (* IF *)
-    else
-    BEGIN (* ELSE *)
-      prev^.next := temp^.next;
-    end; (* ELSE *)
-    
-    Remove := temp^.obj;
-    Dispose(temp);
-  end (* IF *)
-  else
-  BEGIN (* ELSE *)
-    Remove := NIL;
-  end; (* ELSE *)
 END; (* MLListObj.Remove *)
 
 FUNCTION MLListObj.Contains(o: MLObject): BOOLEAN;
-var
+VAR 
   temp: MLObjectNodePtr;
   found: BOOLEAN;
 BEGIN (* MLListObj.Contains *)
   temp := head;
   found := FALSE;
 
-  while ((temp <> NIL) and (not found)) do
-  BEGIN (* WHILE *)
-    if temp^.obj^.IsEqualTo(o) then
-    BEGIN (* IF *)
-      found := TRUE;
-    end (* IF *)
-    else
-    BEGIN (* ELSE *)
-      temp := temp^.next;
-    END; (* ELSE *)
-  END; (* WHILE *)
+  WHILE ((temp <> NIL) AND (NOT found)) DO
+    BEGIN (* WHILE *)
+      IF temp^.obj^.IsEqualTo(o) THEN
+        BEGIN (* IF *)
+          found := TRUE;
+        END (* IF *)
+      ELSE
+        BEGIN (* ELSE *)
+          temp := temp^.next;
+        END; (* ELSE *)
+    END; (* WHILE *)
 
- Contains := found;
+  Contains := found;
 END; (* MLListObj.Contains *)
 
 
@@ -196,7 +197,7 @@ PROCEDURE MLListObj.Clear;
 VAR 
   temp: MLObjectNodePtr;
 BEGIN (* MLListObj.Clear *)
-while head <> NIL do
+  WHILE head <> NIL DO
     BEGIN (* WHILE *)
       temp := head^.next;
       Dispose(head);
@@ -215,7 +216,7 @@ BEGIN (* MLListObj.NewIterator *)
 END; (* MLListObj.NewIterator *)
 
 PROCEDURE MLListObj.Prepend(o: MLObject);
-var 
+VAR 
   temp: MLObjectNodePtr;
 BEGIN (* MLListObj.Prepend *)
   curSize := curSize + 1;
@@ -243,15 +244,15 @@ VAR
   o: MLObject;
 BEGIN (* MLListIteratorObj *)
   IF cur <> NIL THEN
-  BEGIN (* IF *)
-    o := cur^.obj;
-    cur := cur^.next;
-    Next := o;
-  END (* IF *)
+    BEGIN (* IF *)
+      o := cur^.obj;
+      cur := cur^.next;
+      Next := o;
+    END (* IF *)
   ELSE
-  BEGIN (* ELSE *)
-    Next := NIL;
-  END; (* ELSE *)
+    BEGIN (* ELSE *)
+      Next := NIL;
+    END; (* ELSE *)
 END; (* MLListIteratorObj.Next *)
 
 FUNCTION MLListIteratorObj.GetList: MLList;
