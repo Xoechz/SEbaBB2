@@ -498,6 +498,6 @@ Die Vector Tests nutzen nur positive Primzahlen, um zu zeigen, dass in diesem Fa
 
 ### UE8
 
-Die Angabe beschreibt bereits ziemlich genau den Ablauf der Implementierung. Die Tests werden wieder wie Unittests umgesetzt.
+Die Angabe beschreibt bereits ziemlich genau den Ablauf der Implementierung und außerdem wurden die gefragen Methoden schon bei früheren Übungen gemacht. Die Tests werden wieder wie Unittests umgesetzt.
 
-1 stunde + 1 stunde testen wahrscheinlich
+3 stunden
